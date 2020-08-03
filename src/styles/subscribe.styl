@@ -1,0 +1,102 @@
+.subscribe 
+    &-banner 
+        background: url('images/main_bg.png') 100% 100% no-repeat
+        background-size: cover;
+        height: ipx(400)
+
+.subscribe-project 
+    background-color: #FDFEFD;
+    margin: ipx(15) ipx(30);
+    border-radius: ipx(20);
+    overflow hidden
+    box-shadow:0 ipx(6) ipx(24) 0 rgba(199,212,207,0.2);
+    position: relative;
+
+    &-top 
+        display: flex;
+        align-items: flex-start;
+
+        img 
+            width: ipx(184);
+            border-radius: ipx(20);
+        &-container 
+            padding: ipx(30);
+            background: white;
+            box-shadow:0 ipx(6) ipx(24) 0 rgba(199,212,207,0.2);
+    &-title 
+        margin-left: ipx(30);
+        font-size: ipx(30);
+        color: color-main;
+    &-tag 
+        position: absolute;
+        right: 0; top: 0;
+        border-radius: 0 ipx(20) 0 ipx(20);
+        width: ipx(120);
+        height: ipx(40);
+        line-height: @height;
+        color: white;
+        font-size: ipx(24);
+        text-align: center;
+        &.not-started
+            background-color: #24B989;
+        &.on-going 
+            background-color: #FFAC59;
+        &.finished 
+            background-color: #C8CDCB;
+    &-desc 
+        padding-top: ipx(20);
+        font-size: ipx(26);
+        color: color-label;
+        line-height: ipx(40);
+    &-detail 
+        padding: ipx(30);
+        &-item 
+            font-size: ipx(28);
+            display: flex;
+            justify-content: space-between;
+            padding: ipx(10) 0;
+            label 
+                color: color-label;
+            span 
+                color: color-main;
+    &-progress 
+        position: absolute
+        height 100%;
+        background-color: #5DC7A5;
+        width: 10%;
+        &-label 
+            text-align: right;
+            font-size: ipx(26);
+            color: #A4B8B1;
+        &-container 
+            position: relative;
+            height: ipx(30);
+            border-radius: ipx(15);
+            overflow: hidden;
+            margin: ipx(20) 0;
+        &-background
+            background: #EFF6F3;
+            position: absolute;
+            height 100%;
+            width: 100%;
+            top: 0; left: 0;
+
+    &-rule 
+        &-title 
+            color: color-sub;
+            margin-top: ipx(40);
+            font-size: ipx(26);
+        &-detail 
+            color: #52647A;
+            line-height: ipx(40);
+
+.percent 
+    width: ipx(150);
+    height: ipx(64);
+    line-height: @height;
+    border-radius: ipx(20);
+    color: #ACBDB7;
+    border: 1px solid @color;
+    &.active 
+        color: color-green;
+        border-color: @color;

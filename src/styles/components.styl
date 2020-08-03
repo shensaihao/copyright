@@ -1,0 +1,130 @@
+.input
+    &-container 
+        padding ipx(5) 0;
+    &-label 
+        color color-label;
+        font-size ipx(28);
+        text-align: left;
+        margin: ipx(10) 0;
+    &-wrapper 
+        position relative
+        display flex;
+        background-color #F5FAF9
+        border-radius: ipx(20)
+        &.light 
+            background-color: #EEF4F1;
+        &.disabled
+            background-color: #E1F2E9;
+        input 
+            flex: 1;
+            // width 100%
+            background: transparent;
+            border-style hidden
+            color color-main
+            font-size ipx(30)
+            outline: none
+            padding ipx(15)
+            margin ipx(5) 0
+            border-radius: ipx(20)
+            &::-webkit-input-placeholder
+                color color-placeholder
+            &::-moz-placeholder
+                color color-placeholder
+            &:-moz-placeholder
+                color color-placeholder
+            &:-ms-input-placeholder
+                color color-placeholder
+    &-after 
+        position: absolute;
+        right: ipx(20); top: 0;
+        height: 100%;
+        display: flex;
+        align-items: center;
+    &-eye 
+        position: absolute;
+        right: ipx(20); top: 0;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        img 
+            width: ipx(44);
+    &-error 
+        color color-error
+    &-bottom 
+        padding ipx(5) 0
+        display flex
+        min-height: ipx(24)
+        justify-content: space-between;
+        align-items: center;
+        color: color-label
+
+.i-btn
+    cursor pointer
+    text-align center
+    height ipx(72)
+    line-height: @height;
+    font-size ipx(32)
+    color white
+    border-radius: ipx(20)
+    background-color: color-primary;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &.loading 
+        opacity .6
+    &:active 
+        opacity .7
+    &.disabled 
+        background: #92AFA6;
+        cursor not-allowed;
+    &.outline 
+        background: white
+        border 1px solid color-primary
+        color color-primary
+        circle 
+            fill color-primary
+
+.confirm-modal 
+    &.am-modal-transparent 
+        width: ipx(600)
+    .am-modal-body
+        height: auto;
+        border-radius ipx(20);
+.picker 
+    .am-modal-content
+        border-radius ipx(20) ipx(20) 0 0 
+    &-item 
+        height ipx(100)
+        line-height @height
+        font-size ipx(32)
+        color color-main
+        text-align: center
+    &-cancel 
+        @extends .picker-item
+        color color-label
+        border-top 1px solid color-border;
+        &:active, ../-item:active 
+            background: color-background
+
+.modal 
+    .am-modal-content
+        border-radius ipx(20) ipx(20) 0 0 
+    &-top 
+        display flex
+        align-items: center;
+        height: ipx(80);
+        border-bottom: 1px solid #DFEAE4;
+    &-cancel 
+        flex: 1;
+        color: color-label;
+        font-size: ipx(30);
+        padding-left: ipx(30);
+        text-align: left;
+    &-title 
+        flex: 1;
+        color: color-main;
+        text-align: center;
+        font-size: ipx(30);
+    &-right 
+        flex: 1;
+    

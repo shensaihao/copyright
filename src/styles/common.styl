@@ -1,0 +1,165 @@
+.flex-between 
+    display: flex;
+    justify-content: space-between;
+
+.flex-start
+    display: flex
+    justify-content: flex-start
+    align-items: center
+
+.flex-between-center
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+.flex-center-center
+    display flex
+    justify-content: center
+    align-items: center
+
+.flex-around-center
+    display: flex
+    justify-content: space-around
+    align-items: center
+
+.flex-between-start
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+.flex-between-end
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+.flex-align-center 
+    display: flex;
+    align-items: center;
+
+.flex-center 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+.flex-center-end
+    display: flex
+    justify-content: center
+    align-items: flex-end
+
+.flex-end
+    display: flex
+    justify-content: flex-end
+    align-items: center
+
+.flex-column-between
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+
+.flex-column-around
+    display: flex
+    flex-direction: column
+    justify-content: space-around
+
+.flex-column-start
+    display: flex
+    flex-direction: column
+    justify-content: flex-start
+
+.flex-column-center-center
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+
+.flex-column-center
+    display: flex
+    flex-direction: column
+    justify-content: center
+
+.flex-column-end
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: flex-end
+
+.flex-start-end
+    display flex
+    justify-content: flex-start
+    align-items: flex-end
+
+.text-center
+    text-align: center;
+
+.text-left 
+    text-align: left;
+
+.text-right 
+    text-align: right;
+
+.text-wrap
+    text-align: justify;
+    text-justify: newspaper;
+    word-break: break-all;
+
+.font-weight
+    font-weight: bold
+
+.font-weight-bold
+    font-weight: bold
+
+.curser-pointer
+    cursor: pointer
+
+create-margin(length)
+    .ml-{length}
+        margin-left ipx(length)
+    .mr-{length}
+        margin-right ipx(length)
+    .mt-{length}
+        margin-top ipx(length)
+    .mb-{length}
+        margin-bottom ipx(length)
+    .m-x-{length}
+        margin-left ipx(length)
+        margin-right ipx(length)
+    .m-y-{length}
+        margin-top ipx(length)
+        margin-bottom ipx(length)
+    .margin-{length}
+        margin ipx(length)
+
+create-padding(length)
+    .pl-{length}
+        padding-left ipx(length)
+    .pr-{length}
+        padding-right ipx(length)
+    .pt-{length}
+        padding-top ipx(length)
+    .pb-{length}
+        padding-bottom ipx(length)
+        
+    .p-x-{length}
+        padding-left ipx(length)
+        padding-right ipx(length)
+    .p-y-{length}
+        padding-top ipx(length)
+        padding-bottom ipx(length)
+    .padding-{length}
+        padding ipx(length)
+
+create-font-size(size)
+    .ft-size-{size}
+        font-size ipx(size)
+
+create-classes()
+    for $i in range(1, 120, 1)
+        create-margin($i)
+        create-padding($i)
+    for $i in range(5, 100, 5)
+        create-margin($i)
+        create-padding($i)
+    for $i in range(10, 50, 1)
+        create-font-size($i)
+
+create-classes()

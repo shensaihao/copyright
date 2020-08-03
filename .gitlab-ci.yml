@@ -1,0 +1,15 @@
+stages:
+  - build
+ 
+job1:
+  stage: build
+  script: 
+    - node -v && yarn -v
+    - yarn 
+    - CI=false yarn build
+
+cache: 
+  key: soh-wallet
+  untracked: true
+  paths:
+    - node_modules/
