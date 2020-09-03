@@ -1,279 +1,394 @@
-import React,{useState} from 'react'
-import { useHistory } from 'react-router-dom'
-import {Dropdown, Menu} from 'antd'
+import React,{useState, useEffect} from 'react'
+import { Menu} from 'antd'
 import { Layout } from 'antd';
 import { Form, Button, Input,Radio } from 'antd';
-import { UserOutlined, LaptopOutlined } from '@ant-design/icons';
-import { Upload } from 'antd';
+import { Upload, Modal} from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import { dentificationService, useLoading } from 'src/service';
+import { Link } from 'react-router-dom'
 
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
+const { Content, Sider } = Layout;
 
 export default function Certification() {
-    const history = useHistory()
     const [license, setLicense] = useState([])
-    const [idCard, setIdCard] = useState([])
+    const [idCardFont, setIdCardFont] = useState([])
+    const [inCardBack, setInCardBack] = useState([])
     const [status, setStatus] = useState(false)
+    const [certification, setCertification] = useState('')
+    const [enterpriseName, setEnterpriseName] = useState('')
+    const [institutionCode, setInstitutionCode] = useState('')
+    const [legalRepresentative, setLegalRepresentative] = useState('')
+    const [enterpriseProperty, setEnterpriseProperty] = useState('')
+    const [loading, identificationCreate] = useLoading(dentificationService.postIdentificationCreate)
+    const [finish, setFinish] = useState(null)
+    const [initialValues, setInitialValues] = useState({})
+    const [key, setKey] = useState('1')
+    const [previewVisible, setPreviewVisible] = useState(false)
+    const [previewImage, setPreviewImage] = useState(false)
+    const [isCertification, setIsCertification] = useState(false)
     // const [form, setForm] = useState({})
 
-    // useEffect(() => {
-    //     const sta = localStorage.getItem('status')
-    //     setStatus(sta)
-    //     const info = JSON.parse(localStorage.getItem('info'))
-    //     setForm(info)
-    //     console.log(info)
-    // }, [status])
-    
-
-    const handelRegistration = () => {
-        history.push('/home')
+    const getBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
     }
 
-    const handelOriginal = () => {
-        history.push('/original')
-    }
+    const handleCancel = () => setPreviewVisible(false);
 
-    const handelCertification = () => {
-        history.push('/certification')
-    }
+    const handlePreview = async file => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj);
+        }
 
-    const onFinish = (value) => {
-        setStatus(true)
-        localStorage.setItem('status', true)
-        const values = JSON.stringify(value)
-        localStorage.setItem('info', values)
+        setPreviewImage(file.url || file.preview)
+        setPreviewVisible(true)
     };
 
-    const handelChangeIdCard = (fileList) => {
-        setIdCard(fileList.fileList)
+    const uploadButton = (
+        <div className="flex-column-center-center upload-immage">
+            <img src={require('src/images/upload_icon.png')} alt=""/>
+            <div className="mt-10 ft-size-18 color-lable">点击上传营业执照</div>
+        </div>
+    );
+
+    const uploadCardButton = (
+        <div className="flex-column-center-center upload-card-button">
+            <img src={require('src/images/upload_icon.png')} alt=""/>
+            <div className="mt-10 ft-size-18 color-lable">点击上传身份证件</div>
+        </div>
+    )
+
+    const onFinish = (value) => {
+        setFinish(value)
+        localStorage.setItem('form', JSON.stringify(value))
+        localStorage.setItem('register', true)
+    };
+
+    const handelChangeIdCardFont = (res) => {
+        const {fileName, originalFilename, relativePath} = res.data
+        setIdCardFont([{
+            uid: fileName,
+            name: originalFilename,
+            status: 'done',
+            url: relativePath,
+        }])
     }
 
-    const handelChangeLicense = (fileList) => {
-        setLicense(fileList.fileList)
+    const handelChangeIdCardBack = (res) => {
+        const {fileName, originalFilename, relativePath} = res.data
+        setInCardBack([{
+            uid: fileName,
+            name: originalFilename,
+            status: 'done',
+            url: relativePath,
+        }])
     }
 
-    const menu = (
-        <Menu>
-          <Menu.Item onClick={handelCertification}>
-            实名认证
-          </Menu.Item>
-          <Menu.Item>
-            原创作品
-          </Menu.Item>
-          <Menu.Item>
-            版权作品
-          </Menu.Item>
-          <Menu.Item>
-            退出登录
-          </Menu.Item>
-        </Menu>
-      );
+    const handelChangeLicense = (res) => {
+        const {fileName, originalFilename, relativePath} = res.data
+        setLicense([{
+            uid: fileName,
+            name: originalFilename,
+            status: 'done',
+            url: relativePath,
+        }])
+    }
 
-    const header = (
-        <div className="main-tab flex-around-center">
-            <div className="flex-around-center">
-                <div className='main-tab-item text-center p-x-25'>
-                    <div className="main-tab-item">
-                        首页
+    const handelRemoveLicense = (res) => {
+        console.log(res)
+    }
+
+    useEffect(() => {
+        if (localStorage.getItem('register')) {
+            setStatus(true)
+            if (localStorage.getItem('form')) {
+                const form = JSON.parse(localStorage.getItem('form'))
+                console.log(form)
+                setLicense(form.enterpriseLicense.fileList)
+                setIdCardFont(form.legalIdentityCards.fileList)
+                setCertification(form.certification)
+                setEnterpriseName(form.enterpriseName)
+                setInstitutionCode(form.institutionCode)
+                setLegalRepresentative(form.legalRepresentative)
+                setEnterpriseProperty(form.enterpriseProperty)
+            }
+        }
+        console.log(status)
+    }, [status])
+
+    useEffect(()=>{
+        if (finish&&!status) {
+            finish.legalIdentityCards = idCardFont[0].url
+            finish.enterpriseLicense = license[0].url
+            identificationCreate(finish)
+                .then((res) => {
+                    setStatus(true)
+                    localStorage.setItem('status', true)
+                    const values = JSON.stringify(finish)
+                    localStorage.setItem('info', values)
+                })
+        }
+    },[finish, idCardFont, identificationCreate, license, status])
+
+    const key1 = (
+        <Form
+            name="basic"
+            onFinish={onFinish}
+            size="middle"
+            initialValues={initialValues}
+        >
+            <Form.Item>
+                <span className="label-gray mb-10">实名认证</span>
+                <Form.Item
+                    name="certification"
+                    rules={[{ required: true, message: '请选择实名认证类型' }]}
+                >
+                    <Radio.Group value={certification}>
+                        <Radio value='PERSONAL_CERTIFICATION'>个人认证</Radio>
+                        <Radio value='ENTERPRISE_CERTIFICATION'>企业认证</Radio>
+                    </Radio.Group>
+                </Form.Item>
+            </Form.Item>
+            
+            <Form.Item>
+                <span className="label-gray mb-10">企业属性</span>
+                <Form.Item
+                    name="enterpriseProperty"
+                    rules={[{ required: true, message: '请选择企业属性' }]}
+                >
+                    <Radio.Group value={enterpriseProperty}>
+                        <Radio value='PROFIT_ENTERPRISE'>盈利企业</Radio>
+                        <Radio value='COMMONWEAL_ENTERPRISE'>公益企业</Radio>
+                    </Radio.Group>
+                </Form.Item>
+            </Form.Item>
+
+            <Form.Item>
+                <span className="label-gray">企业全称</span>
+                <Form.Item
+                    style={{width: '836px', marginTop: '10px'}}
+                    name="enterpriseName"
+                    rules={[{ required: true, message: '请输入企业全称' }]}
+                >
+                    <Input placeholder={enterpriseName}/>
+                </Form.Item>
+            </Form.Item>
+            
+            <Form.Item>
+                <span className="label-gray">企业营业执照</span>
+                <Form.Item
+                    name="enterpriseLicense"
+                    className="enterprise-license"
+                    style={{ marginTop: '10px'}}
+                    rules={[{ required: true, message: '请上传企业营业执照' }]}
+                    
+                >
+                    <Upload
+                        action='/v1/files/fileUpload'
+                        fileList={license}
+                        listType="picture-card"
+                        onPreview={handlePreview}
+                        onRemove={handelRemoveLicense}
+                        onSuccess={handelChangeLicense}
+                    >
+                        {license.length >= 1 ? null : uploadButton}
+                    </Upload>
+                </Form.Item>
+            </Form.Item>
+
+            <Form.Item>
+                <span className="label-gray">企业机构代码</span>
+                <Form.Item
+                    style={{width: '836px', marginTop: '10px'}}
+                    name="institutionCode"
+                    rules={[{ required: true, message: '请输入企业机构代码' }]}
+                >
+                    <Input placeholder={institutionCode}/>
+                </Form.Item>
+            </Form.Item>
+
+            <Form.Item>
+                <span className="label-gray">企业法人代表</span>
+                <Form.Item
+                    style={{width: '836px', marginTop: '10px'}}
+                    name="legalRepresentative"
+                    rules={[{ required: true, message: '请输入企业法人代表' }]}
+                >
+                    <Input placeholder={legalRepresentative}/>
+                </Form.Item>
+            </Form.Item>
+
+            <Form.Item style={{marginBottom: '35px'}}>
+                <span className="label-gray">企业法人身份证</span>
+                <div className="flex-between-center" style={{width: '836px'}}>
+                    <Form.Item
+                        name="legalIdentityCards1"
+                        className="legal-identity-cards"
+                        style={{ marginTop: '10px'}}
+                        rules={[{ required: true, message: '请上传企业法人身份证' }]}
+                        
+                    >
+                        <Upload
+                            action='/v1/files/fileUpload'
+                            fileList={idCardFont}
+                            listType="picture-card"
+                            onPreview={handlePreview}
+                            onSuccess={handelChangeIdCardFont}
+                        >
+                            {idCardFont.length >= 1 ? null : uploadCardButton}
+                        </Upload>
+                    </Form.Item>
+                    <div className="legal-identity-cards-temp flex-column-center-center">
+                        <img src={require('src/images/id_card_font.png')} alt=""/>
+                        <div className="color-lable ft-size-18">身份证正面</div>
                     </div>
                 </div>
-                <div className='main-tab-item text-center'>
-                    版权交易
+            </Form.Item>
+            
+            <Form.Item>
+                <div className="flex-between-center" style={{width: '836px'}}>
+                    <Form.Item
+                        name="legalIdentityCards2"
+                        className="legal-identity-cards"
+                        style={{ marginTop: '10px'}}
+                        rules={[{ required: true, message: '请上传企业法人身份证' }]}
+                        
+                    >
+                        <Upload
+                            action='/v1/files/fileUpload'
+                            fileList={inCardBack}
+                            listType="picture-card"
+                            onPreview={handlePreview}
+                            onSuccess={handelChangeIdCardBack}
+                        >
+                            {inCardBack.length >= 1 ? null : uploadCardButton}
+                        </Upload>
+                    </Form.Item>
+                    <div className="legal-identity-cards-temp flex-column-center-center">
+                        <img src={require('src/images/id_card_back.png')} alt=""/>
+                        <div className="color-lable ft-size-18">身份证反面</div>
+                    </div>
                 </div>
-                <div className='main-tab-item text-center'>
-                    版权查询
-                </div>
-                <div className='main-tab-item text-center'>
-                    区块信息
+            </Form.Item>
+    
+            <Form.Item style={{width: '900px'}}>
+                {
+                    !status &&
+                    <Button style={{float: 'right'}} size="large" htmlType="submit" className="certification-commit-button mt-10">
+                        认证
+                    </Button>
+                }
+                
+                {
+                    status &&
+                    <Button disabled size="large">
+                        审核中
+                    </Button>
+                }
+            </Form.Item>
+            <Modal
+                visible={previewVisible}
+                footer={null}
+                onCancel={handleCancel}
+                >
+                <img alt="example" style={{ width: '100%' }} src={previewImage} />
+            </Modal>
+        </Form>
+    )
+
+    const certificationSuccess = (
+        <div className="certification_succ">
+            <div className="certification_succ_top flex-start mb-20">
+                <img src={require('src/images/step_one_sucess.png')} className="ml-58" alt=""/>
+                <div className="ml-30">
+                    <div className="ft-size-24 color-main font-weight">实名认证成功</div>
+                    <div className="color-secondry">您已完成实名认证，现在可以对您的原创作品进行认证了哦~</div>
                 </div>
             </div>
-            <div className="flex-around-center">
-                <div className="main-right-btn m-x-13 mr-30 curser-pointer" onClick={handelOriginal}>原创登记</div>
-                <div className="main-right-btn m-x-13 curser-pointer" onClick={handelRegistration}>版权登记</div>
-                <div className="main-right-icon m-x-13">
-                    <img src={require('src/images/search.png')} alt=""/>
-                </div>
-                <div className="main-right-icon m-x-13">
-                    <img src={require('src/images/notice.png')} alt=""/>
-                </div>
-                <Dropdown overlay={menu}>
-                    <div className="main-right-avatar flex-around-center ml-23">
-                        <img src={require('src/images/avatar.png')} alt=""/>
-                        <span className="user-name-box">June</span>
-                    </div>
-                </Dropdown>
+            <div className="flex-end">
+                <div className="certification_button flex-center-center mr-20">作品认证</div>
+                <div className="certification_back_button flex-center-center">返回首页</div>
             </div>
         </div>
     )
 
-    const uploadBtn = (
-        <>
-            <UploadOutlined style={{fontSize: '40px',color:'#7D8EA8'}}/>
-            <div>上传</div>
-        </>
+    const hasCertification = (
+        <div className="has_certification flex-column-center">
+            <div className="flex-start m-y-20">
+                <div className="color-lable ft-size-18 mr-90">认证类型</div>
+                <div className="color-main ft-size-18">企业</div>
+            </div>
+            <div className="flex-start m-y-20">
+                <div className="color-lable ft-size-18 mr-90">企业类型</div>
+                <div className="color-main ft-size-18">公益</div>
+            </div>
+            <div className="flex-start m-y-20">
+                <div className="color-lable ft-size-18 mr-90">企业名称</div>
+                <div className="color-main ft-size-18">成都链博</div>
+            </div>
+            <div className="flex-start-center m-y-20">
+                <div className="color-lable ft-size-18 mr-90">上传执照</div>
+                <div className="has_certification_img mb-40">
+                    <img src={require('src/images/step_six_emplete.png')} alt=""/>
+                </div>
+            </div>
+            <div className="flex-start m-y-20">
+                <div className="color-lable ft-size-18 mr-90">企业机构代码</div>
+                <div className="color-main ft-size-18">123456789</div>
+            </div>
+            <div className="flex-start m-y-20">
+                <div className="color-lable ft-size-18 mr-90">企业法人代表</div>
+                <div className="color-main ft-size-18">XXXXXX</div>
+            </div>
+            <div className="flex-column m-y-20">
+                <div className="color-lable ft-size-18 mb-16">上传证件</div>
+                <div className="has_certification_card">
+                    <img className="mr-30" src={require('src/images/id_card_font.png')} alt=""/>
+                    <img src={require('src/images/id_card_back.png')} alt=""/>
+                </div>
+            </div>
+        </div>
     )
 
     return (
-        <Layout>
-            <Header>
-                {header}
-            </Header>
-            <Layout>
+        <div className="certification_box">
+            <div className="flex-start-center certification_wraper">
                 <Sider width={200} className="site-layout-background">
                     <Menu
                     mode="inline"
-                    defaultSelectedKeys={['1']}
-                    defaultOpenKeys={['sub1']}
                     style={{ height: '100%', borderRight: 0 }}
+                    defaultSelectedKeys={['4']}
                     >
-                    <SubMenu key="sub1" icon={<UserOutlined />} title="账号管理">
-                        <Menu.Item key="1">实名认证</Menu.Item>
-                        <Menu.Item key="2">账号修改</Menu.Item>
-                    </SubMenu>
-                    <SubMenu key="sub2" icon={<LaptopOutlined />} title="作品登记">
-                        <Menu.Item key="5">原创作品</Menu.Item>
-                        <Menu.Item key="6">版权作品</Menu.Item>
-                    </SubMenu>
+                        <Menu.Item key="1">
+                            <Link to="/copyrightlist">我的作品</Link>
+                        </Menu.Item>
+                        <Menu.Item key="3">
+                            <Link to="/userphone">绑定手机</Link>
+                        </Menu.Item>
+                        <Menu.Item key="4">
+                            <Link to="/certification">实名信息</Link>
+                        </Menu.Item>
                     </Menu>
                 </Sider>
-                <Layout style={{ padding: '0 24px 24px' }}>
+                <Layout style={{ background: '#fff',minHeight: '748px' }}>
                     <Content
-                    className="site-layout-background"
+                    className="site-content-background"
                     style={{
                         padding: 24,
                         margin: 0,
                         minHeight: 280,
                     }}
                     >
-                    <Form
-                        name="basic"
-                        onFinish={onFinish}
-                        size="middle"
-                    >
-                        <Form.Item style={{width: '700px'}}>
-                            <span className="label-gray">实名认证</span>
-                            <Form.Item
-                                name="certification"
-                                rules={[{ required: true, message: '请选择实名认证类型' }]}
-                            >
-                                <Radio.Group>
-                                    <Radio value='people'>个人认证</Radio>
-                                    <Radio value='compony'>企业认证</Radio>
-                                </Radio.Group>
-                            </Form.Item>
-                        </Form.Item>
-                        
-                        <Form.Item>
-                            <span className="label-gray">企业属性</span>
-                            <Form.Item
-                                style={{width: '700px'}}
-                                name="attribute"
-                                rules={[{ required: true, message: '请选择企业属性' }]}
-                            >
-                                <Radio.Group>
-                                    <Radio value='profit'>盈利企业</Radio>
-                                    <Radio value='public'>公益企业</Radio>
-                                </Radio.Group>
-                            </Form.Item>
-                        </Form.Item>
-
-                        <Form.Item>
-                            <span className="label-gray">企业全称</span>
-                            <Form.Item
-                                style={{width: '700px'}}
-                                name="full_name"
-                                rules={[{ required: true, message: '请输入企业全称' }]}
-                            >
-                                <Input />
-                            </Form.Item>
-                        </Form.Item>
-                        
-                        <Form.Item>
-                            <span className="label-gray">企业营业执照</span>
-                            <div className="step-one-upload flex-center">
-                            <Form.Item
-                                name="license"
-                                rules={[{ required: true, message: '请上传企业营业执照' }]}
-                                
-                            >
-                                <Upload
-                                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                    listType="picture-card"
-                                    fileList={license}
-                                    onChange={handelChangeLicense}
-                                    >
-                                        {
-                                            license.length > 0 ? null : uploadBtn
-                                        }
-                                </Upload>
-                            </Form.Item>
-                            </div>
-                        </Form.Item>
-
-                        <Form.Item>
-                            <span className="label-gray">企业机构代码</span>
-                            <Form.Item
-                                style={{width: '700px'}}
-                                name="organization_code"
-                                rules={[{ required: true, message: '请输入企业机构代码' }]}
-                            >
-                                <Input />
-                            </Form.Item>
-                        </Form.Item>
-
-                        <Form.Item>
-                            <span className="label-gray">企业法人代表</span>
-                            <Form.Item
-                                style={{width: '700px'}}
-                                name="legal_representative"
-                                rules={[{ required: true, message: '请输入企业法人代表' }]}
-                            >
-                                <Input />
-                            </Form.Item>
-                        </Form.Item>
-
-                        <Form.Item>
-                            <span className="label-gray">企业法人身份证</span>
-                            <div className="step-one-upload flex-center">
-                            <Form.Item
-                                name="id_card"
-                                rules={[{ required: true, message: '请上传企业法人身份证' }]}
-                                
-                            >
-                                <Upload
-                                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                    listType="picture-card"
-                                    fileList={idCard}
-                                    onChange={handelChangeIdCard}
-                                    >
-                                        {
-                                            idCard.length > 0 ? null : uploadBtn
-                                        }
-                                </Upload>
-                            </Form.Item>
-                            </div>
-                        </Form.Item>
-                
-                        <Form.Item style={{width: '700px'}}>
-                            {
-                                !status &&
-                                <Button type="primary" size="large" htmlType="submit" style={{width: '100%'}}>
-                                    登记
-                                </Button>
-                            }
-                            
-                            {
-                                status &&
-                                <Button disabled size="large" style={{width: '100%'}}>
-                                    审核中
-                                </Button>
-                            }
-                        </Form.Item>
-                    </Form>
+                    {
+                        !isCertification ? certificationSuccess : hasCertification
+                    }
                     </Content>
                 </Layout>
-            </Layout>
-        </Layout>
+            </div>
+        </div>
     )
 }

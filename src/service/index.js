@@ -1,5 +1,8 @@
+import { form } from './axios';
+
 export * from './utils'
 
-export { default as subscribeService } from './apis/subscribe';
 export { default as mineService } from './apis/mine';
-export { default as assetService } from './apis/asset';
+export { default as originalService } from './apis/original';
+export { default as dentificationService } from './apis/identification'
+export { default as copyrightService } from './apis/copyright'

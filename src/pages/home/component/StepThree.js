@@ -30,7 +30,7 @@ export default function StepTree(props) {
                 size="middle"
             >
                 <Form.Item style={{width: '700px'}}>
-                    <span className="label-gray">版权登记类型</span>
+                    <span className="label-gray">作品登记类型</span>
                     <Form.Item
                         name="person_type"
                         rules={[{ required: true, message: '请选择登记类型' }]}

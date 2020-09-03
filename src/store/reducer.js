@@ -1,7 +1,7 @@
 import { createStore } from 'redux';
 
 const initialState = {
-    user: { name: 'zjh' },
+    user: {},
     login: false,
 }
 

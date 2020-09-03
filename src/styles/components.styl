@@ -1,72 +1,49 @@
 .input
-    &-container 
-        padding ipx(5) 0;
-    &-label 
-        color color-label;
-        font-size ipx(28);
-        text-align: left;
-        margin: ipx(10) 0;
-    &-wrapper 
-        position relative
-        display flex;
-        background-color #F5FAF9
-        border-radius: ipx(20)
-        &.light 
-            background-color: #EEF4F1;
-        &.disabled
-            background-color: #E1F2E9;
+    &-container
+        width: 450px;
+        height: 48px;
+        background: #FFFFFF;
+        border: 1px solid #D9DFE9;
+        border-radius: 6px;
+    &-wrapper
+        height: 44px
         input 
-            flex: 1;
-            // width 100%
-            background: transparent;
-            border-style hidden
-            color color-main
-            font-size ipx(30)
+            border: none 
             outline: none
-            padding ipx(15)
-            margin ipx(5) 0
-            border-radius: ipx(20)
-            &::-webkit-input-placeholder
-                color color-placeholder
-            &::-moz-placeholder
-                color color-placeholder
-            &:-moz-placeholder
-                color color-placeholder
-            &:-ms-input-placeholder
-                color color-placeholder
-    &-after 
-        position: absolute;
-        right: ipx(20); top: 0;
-        height: 100%;
-        display: flex;
-        align-items: center;
-    &-eye 
-        position: absolute;
-        right: ipx(20); top: 0;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        img 
-            width: ipx(44);
-    &-error 
-        color color-error
-    &-bottom 
-        padding ipx(5) 0
-        display flex
-        min-height: ipx(24)
-        justify-content: space-between;
-        align-items: center;
-        color: color-label
+            height 24px
+            width: 270px
+    &-line
+        width: 1px;
+        height: 18px;
+        background: #D9DFE9;
+        margin: 12px 10px 12px 0
+    &-after-code
+        height 46px
+        line-height: 46px
+        border-left: 1px solid #D9DFE9;
+        border-radius: 0px 6px 6px 0px;
+        padding: 0 25px
+        color: #0665CE;
+        cursor pointer
+    &-after-second
+        height 46px
+        line-height: 46px
+        border-left: 1px solid #D9DFE9;
+        border-radius: 0px 6px 6px 0px;
+        padding: 0 25px
+        color: #C4CDDC;
+        cursor pointer
+    
 
 .i-btn
     cursor pointer
     text-align center
-    height ipx(72)
+    height 45px
     line-height: @height;
-    font-size ipx(32)
+    font-size 20px
     color white
-    border-radius: ipx(20)
-    background-color: color-primary;
+    background:rgba(1,87,183,1);
+    border-radius:4px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -74,15 +51,7 @@
         opacity .6
     &:active 
         opacity .7
-    &.disabled 
-        background: #92AFA6;
-        cursor not-allowed;
-    &.outline 
-        background: white
-        border 1px solid color-primary
-        color color-primary
-        circle 
-            fill color-primary
+
 
 .confirm-modal 
     &.am-modal-transparent 

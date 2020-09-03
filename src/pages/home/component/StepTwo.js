@@ -11,14 +11,17 @@ export default function StepTwo(props) {
     const [max, setMax] = useState(0)
     const [data, setData] = useState([])
     const [array, setArray] = useState([0])
+    const [next, setNext] = useState(false)
 
     useEffect(() => {
+      console.log(props)
       setTimeout(() => {
         setTestFont('检测完成    检测结果：可进行版权登记')
+        setNext(true)
       }, 12000);
       setMax(parseInt(array.sort().reverse()[0],10))
       console.log(array.sort())
-    } ,[array,max])
+    } ,[array, max, props])
 
     useEffect(() => {
       timerRef.current = setInterval(() => {
@@ -43,12 +46,12 @@ export default function StepTwo(props) {
     }
 
     return (
-        <div className="">
+        <div className="pb-30">
             <div className="flex-center">
                     <div className="step-two-top-box text-center p-y-30">
                         <div className="detecting-title">正在检测全网已备案作品</div>
                         <div className="detecting-works p-y-16">
-                        已检测
+                          已检测
                             <span className="detected-works" ref={timerRef}>
                             {
                               pageCount
@@ -123,7 +126,11 @@ export default function StepTwo(props) {
             </Chart>
             </div>
             <div className="flex-center mt-40">
+              {
+                next&&
                 <Button style={{width: '700px'}} type="primary" onClick={handelSubmit}>下一步</Button>
+              }
+                
             </div>
         </div>
     )

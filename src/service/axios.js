@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 const handleResposne = (res, resolve, reject) => {
-    if ((res.response_code && res.response_code === '00') || (res.success && res.success === 'SUCCESS')) {
-        resolve(res.content || res.data)
+    if ((res.responseCode && res.responseCode === '_200')) {
+        resolve(res)
     } else {
-        if (res.response_code) {
-            reject({ code: res.response_code, message: res.response_msg })
+        if (res.responseCode) {
+            reject(res)
         } else {
             reject(res.error)
         }
@@ -17,30 +17,38 @@ const handleError = (err, reject) => {
     reject({ code: 'NET_ERROR', message: '网络错误' })
 }
 
-export const get = (url, params) => new Promise((resolve, reject) => {
-    if (params) {
-        const paramsArray = [];
-        // 拼接参数
-        Object.keys(params).forEach(key => paramsArray.push(`${key}=${params[key]}`));
-        if (paramsArray.length > 0) {
-            if (url.search(/\?/) === -1) {
-                url += `?${paramsArray.join('&')}`;
-            } else {
-                url += `&${paramsArray.join('&')}`;
-            }
-        }
+export const get = (url, params, data) => new Promise((resolve, reject) => {
+    if (params&&data) {
+        console.log(data)
+        axios(url, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Accept-Language': 'zh-CN',
+            },
+            params: params,
+            data: data
+        })
+            .then(response => response.data)
+            .then(res => handleResposne(res, resolve, reject))
+            .catch(err => handleError(err, reject));
     }
-    axios(url, {
-        method: 'GET',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            'Accept-Language': 'zh-CN',
-        },
-    })
-        .then(response => response.data)
-        .then(res => handleResposne(res, resolve, reject))
-        .catch(err => handleError(err, reject));
+    if (params&&!data) {
+        axios(url, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Accept-Language': 'zh-CN',
+            },
+            params: params
+        })
+            .then(response => response.data)
+            .then(res => handleResposne(res, resolve, reject))
+            .catch(err => handleError(err, reject));
+    }
+    
 })
 
 export const post = (url, jsonData) => new Promise((resolve, reject) => {
@@ -52,6 +60,21 @@ export const post = (url, jsonData) => new Promise((resolve, reject) => {
             'Accept-Language': 'zh-CN',
         },
         data: jsonData,
+    })
+        .then(response => response.data)
+        .then(res => handleResposne(res, resolve, reject))
+        .catch(err => handleError(err, reject));
+})
+
+export const postQuery = (url, queryData) => new Promise((resolve, reject) => {
+    axios(url, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Accept-Language': 'zh-CN',
+        },
+        params: queryData,
     })
         .then(response => response.data)
         .then(res => handleResposne(res, resolve, reject))

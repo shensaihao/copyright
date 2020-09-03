@@ -1,4 +1,4 @@
-import { get, post } from '../axios';
+import { get, post, postQuery } from '../axios';
 
 export default {
 
@@ -9,30 +9,29 @@ export default {
     * 登录
     * {"phone":"","pwd":""}
     */
-    postAuthAccessLogin: (data) => post(`/auth/access/login`, data),
+    postAuthAccessLogin: (username, password) => postQuery(`/v1/login`,username, password),
 
     /**
-     * 登录信息
-     * 
+     * 注册
      */
-    getAuthLoginInfo: (data) => get(`/auth/login_info`, data),
+    postUserCreate: (data) => post(`/v1/user/register`, data),
 
     /**
      * 退出登录
      * 
      */
-    getAuthLogout: (data) => get(`/auth/logout`, data),
+    getAuthLogout: (data) => post(`/v1/security/logout`, data),
 
     /**
      * 获取短信验证码
      * 
      */
-    getAuthMessageSmsCaptcha: (data) => get(`/auth/message/sms_captcha`, data),
-
+    getAuthMessageSmsCaptcha: (data) => get(`/v1/user/sendVerificationCode`, data),
+    
     /**
-     * 设置&修改支付密码
-     * {"phoneCaptcha":"", "payPwd":"要md5"}
+     * 查询手机号是否已经注册
+     * 
      */
-    postAuthModifyPayPwd: (data) => post(`/auth/modify/pay_pwd`, data),
+    getPhoneNumberUsed: (data) => get(`/v1/user/findByTelephone`, data),
 
 }
