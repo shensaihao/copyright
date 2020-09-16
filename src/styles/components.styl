@@ -25,15 +25,66 @@
         padding: 0 25px
         color: #0665CE;
         cursor pointer
+        border-top: none 
+        border-bottom: none
     &-after-second
         height 46px
         line-height: 46px
         border-left: 1px solid #D9DFE9;
         border-radius: 0px 6px 6px 0px;
-        padding: 0 25px
+        padding: 0 10px
         color: #C4CDDC;
         cursor pointer
-    
+        border-top: none 
+        border-bottom: none
+    &-error
+        font-size: 14px;
+        font-weight: 400;
+        color: #F87135;
+        line-height: 11px;
+
+
+.h5_login_form
+    .input
+        &-container
+            width: ivw(590);
+            height: ivw(72);
+            background: #FFFFFF;
+            border: ivw(1) solid #D9DFE9;
+            border-radius: ivw(10);
+        &-wrapper
+            height: ivw(70)
+            input 
+                border: none 
+                outline: none
+                height ivw(60)
+                width: ivw(270)
+                font-size: ivw(28)
+            img 
+                height ivw(30)
+                width: ivw(30)
+        &-line
+            width: ivw(1);
+            height: ivw(18);
+            background: #D9DFE9;
+            margin: ivw(10) ivw(12) ivw(12) 0
+        &-after-code
+            height ivw(72)
+            line-height: ivw(72)
+            border-left: ivw(1) solid #D9DFE9;
+            border-radius: 0px ivw(6) ivw(6) 0px;
+            padding: 0 ivw(25)
+            color: #0665CE;
+            cursor pointer
+        &-after-second
+            height ivw(72)
+            line-height: ivw(72)
+            border-left: ivw(1) solid #D9DFE9;
+            border-radius: 0px ivw(6) ivw(6) 0px;
+            padding: 0 ivw(10)
+            color: #C4CDDC;
+            cursor pointer
+            
 
 .i-btn
     cursor pointer
@@ -51,6 +102,14 @@
         opacity .6
     &:active 
         opacity .7
+.i-btn.plain
+    background: rgba(255, 255, 255, 0);
+    border: 1px solid #0666CE;
+    border-radius: 6px;
+    font-size: 20px;
+    font-weight: 400;
+    color: #0666CE;
+    
 
 
 .confirm-modal 

@@ -51,6 +51,8 @@ export default () => {
                 if (res.responseCode==='_501') {
                     message.warning('登录已过期')
                     history.push('/login')
+                } else {
+                    message.warning(res.errorMsg)
                 }
             })
         }
@@ -65,6 +67,8 @@ export default () => {
                 if (res.responseCode==='_501') {
                     message.warning('登录已过期')
                     history.push('/login')
+                } else {
+                    message.warning(res.errorMsg)
                 }
             })
         }
@@ -79,6 +83,8 @@ export default () => {
                 if (res.responseCode==='_501') {
                     message.warning('登录已过期')
                     history.push('/login')
+                } else {
+                    message.warning(res.errorMsg)
                 }
             })
         }
@@ -93,6 +99,8 @@ export default () => {
                 if (res.responseCode==='_501') {
                     message.warning('登录已过期')
                     history.push('/login')
+                } else {
+                    message.warning(res.errorMsg)
                 }
             })
         }
@@ -107,6 +115,8 @@ export default () => {
                 if (res.responseCode==='_501') {
                     message.warning('登录已过期')
                     history.push('/login')
+                } else {
+                    message.warning(res.errorMsg)
                 }
             })
         }

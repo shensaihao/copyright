@@ -1,12 +1,11 @@
 import React,{useState, useEffect} from 'react'
 import { Form, Button, Select, Input, DatePicker } from 'antd';
 import { Upload, Modal, Radio, Checkbox } from 'antd';
-import { useLocation } from 'react-router-dom'
-import { UploadOutlined } from '@ant-design/icons';
+import { useLocation, useHistory } from 'react-router-dom'
+import {  useSelector } from 'react-redux';
 import locale from 'antd/es/date-picker/locale/zh_CN';
 
 const { Option } = Select;
-const { TextArea } = Input;
 
 export default function StepOne(props) {
     const [programList, setProgramList] = useState([])
@@ -22,7 +21,12 @@ export default function StepOne(props) {
     const [finish, setFinish] = useState(null)
     const [previewVisible, setPreviewVisible] = useState(false)
     const [previewImage, setPreviewImage] = useState(false)
+    const [isChooseChekbox, setIsChooseChekbox] = useState(false)
+    const [descModal, setDescModal] = useState(false)
     const location = useLocation()
+    const history = useHistory()
+    const user = useSelector(state => state.user)
+    const [isCertification, setIsCertification] = useState(false)
 
     useEffect(() => {
         const type = location.search.split('=')
@@ -33,6 +37,12 @@ export default function StepOne(props) {
 
     const [type, setType] = useState('技术成果存证')
 
+    useEffect(() => {
+        if (user.authenticationType) {
+            setIsCertification(true)
+        }
+    }, [user])
+
 
     const onFinish = values => {
         console.log(values)
@@ -41,7 +51,7 @@ export default function StepOne(props) {
 
     const handelProgramListChange = (res) => {
         const {fileName, originalFilename, relativePath} = res.data
-        setProgramList([{
+        setProgramList([...programList, {
             uid: fileName,
             name: originalFilename,
             status: 'done',
@@ -51,7 +61,7 @@ export default function StepOne(props) {
 
     const handelCompositionListChange = (res) => {
         const {fileName, originalFilename, relativePath} = res.data
-        setCompositionList([{
+        setCompositionList([...compositionList, {
             uid: fileName,
             name: originalFilename,
             status: 'done',
@@ -61,7 +71,7 @@ export default function StepOne(props) {
 
     const handelFontListChange = (res) => {
         const {fileName, originalFilename, relativePath} = res.data
-        setFontList([{
+        setFontList([...fontList, {
             uid: fileName,
             name: originalFilename,
             status: 'done',
@@ -71,7 +81,7 @@ export default function StepOne(props) {
 
     const handelWorksListChange = (res) => {
         const {fileName, originalFilename, relativePath} = res.data
-        setWorksList([{
+        setWorksList([...worksList, {
             uid: fileName,
             name: originalFilename,
             status: 'done',
@@ -80,42 +90,83 @@ export default function StepOne(props) {
     }
 
     useEffect(()=>{
-        if (type==='trademark'&&useList[0]&&finish) {
-            finish.serviceCondition = useList[0].url
-            finish.productionFile = shangbiaoList[0].url
+        if (type==='BRAND_TYPE'&&useList[0]&&finish) {
+            const files = []
+            useList.map((item) => {
+                files.push(item.url)
+            })
+            finish.serviceCondition = files.join(',')
+            const file = []
+            shangbiaoList.map((item) => {
+                file.push(item.url)
+            })
+            finish.serviceCondition = files.join(',')
+            finish.productionFile = file.join(',')
             finish.type = type
             props.handelStepOneSubmit(finish)
         }
-        if (type==='copyright'&&zuopingList[0]&&finish) {
-            finish.saveFile = zuopingList[0].url
+        if (type==='COPYRIGHT_TYPE'&&zuopingList[0]&&finish) {
+            const files = []
+            zuopingList.map((item) => {
+                files.push(item.url)
+            })
+            finish.saveFile = files.join(',')
             finish.type = type
             props.handelStepOneSubmit(finish)
         }
-        if (type === 'tradition'&&chuantongList[0]&&finish) {
-            console.log('enter')
-            finish.saveFile = chuantongList[0].url
+        if (type === 'TRADITION_TYPE'&&chuantongList[0]&&finish) {
+            console.log(chuantongList)
+            const files = []
+            chuantongList.map((item) => {
+                files.push(item.url)
+            })
+            finish.saveFile = files.join(',')
             finish.type = type
             props.handelStepOneSubmit(finish)
         }
-        if (type === 'technology'&&jishuList[0]&&finish) {
-            finish.saveFile = jishuList[0].url
-            finish.productionFile = worksList[0].url
+        if (type === 'TECH_TYPE'&&jishuList[0]&&finish) {
+            const files = []
+            jishuList.map((item) => {
+                files.push(item.url)
+            })
+            finish.saveFile = files.join(',')
+            const file = []
+            worksList.map((item) => {
+                file.push(item.url)
+            })
+            finish.productionFile = file.join(',')
             finish.type = type
             props.handelStepOneSubmit(finish)
         }
-        if (type === 'origin'&&invoiceList[0]&&finish) {
-            finish.exportInvoice = invoiceList[0].url
-            finish.productionProcedure = programList[0].url
-            finish.productionElement = compositionList[0].url
+        if (type === 'SOURCE_TYPE'&&invoiceList[0]&&finish) {
+            const file = []
+            invoiceList.map((item) => {
+                file.push(item.url)
+            })
+            finish.exportInvoice = file.join(',')
+            const file1 = []
+            invoiceList.map((item) => {
+                file1.push(item.url)
+            })
+            finish.productionProcedure = file1.join(',')
+            const file2 = []
+            compositionList.map((item) => {
+                file2.push(item.url)
+            })
+            finish.productionElement = file2.join(',')
+            const file3 = []
+            fontList.map((item) => {
+                file3.push(item.url)
+            })
+            finish.saveFile = file3.join(',')
             finish.type = type
-            finish.saveFile = fontList[0].url
             props.handelStepOneSubmit(finish)
         }
     },[worksList, jishuList, zuopingList, useList, shangbiaoList, compositionList, invoiceList, fontList, programList, chuantongList, props, finish, type])
 
     const handelChuantogListChange = (res) => {
         const {fileName, originalFilename, relativePath} = res.data
-        setChuantongList([{
+        setChuantongList([...chuantongList, {
             uid: fileName,
             name: originalFilename,
             status: 'done',
@@ -125,7 +176,7 @@ export default function StepOne(props) {
 
     const handelJishuListChange  = (res) => {
         const {fileName, originalFilename, relativePath} = res.data
-        setJishuList([{
+        setJishuList([...jishuList, {
             uid: fileName,
             name: originalFilename,
             status: 'done',
@@ -135,7 +186,7 @@ export default function StepOne(props) {
 
     const handelZuopingListChange = (res) => {
         const {fileName, originalFilename, relativePath} = res.data
-        setZuopingList([{
+        setZuopingList([...zuopingList, {
             uid: fileName,
             name: originalFilename,
             status: 'done',
@@ -145,7 +196,7 @@ export default function StepOne(props) {
 
     const handelUseListChange = (res) => {
         const {fileName, originalFilename, relativePath} = res.data
-        setUseList([{
+        setUseList([...useList, {
             uid: fileName,
             name: originalFilename,
             status: 'done',
@@ -155,7 +206,7 @@ export default function StepOne(props) {
 
     const handelShangbiaoListChange = (res) => {
         const {fileName, originalFilename, relativePath} = res.data
-        setShangbiaoList([{
+        setShangbiaoList([...shangbiaoList, {
             uid: fileName,
             name: originalFilename,
             status: 'done',
@@ -165,7 +216,7 @@ export default function StepOne(props) {
 
     const handelInvoiceListChange = (res) => {
         const {fileName, originalFilename, relativePath} = res.data
-        setInvoiceList([{
+        setInvoiceList([...invoiceList, {
             uid: fileName,
             name: originalFilename,
             status: 'done',
@@ -179,6 +230,10 @@ export default function StepOne(props) {
             <div className="mt-10 ft-size-18 color-lable">点击上传文件</div>
         </div>
     )
+
+    const handelClickCertification = () => {
+        history.push('/certification')
+    }
 
     const getBase64 = (file) => {
         return new Promise((resolve, reject) => {
@@ -199,6 +254,14 @@ export default function StepOne(props) {
         setPreviewImage(file.url || file.preview)
         setPreviewVisible(true)
     };
+
+    const handelClickDesc = () => {
+        setDescModal(true)
+    }
+
+    const handleDescModalCancel = () => {
+        setDescModal(false)
+    }
 
     const jishu_origin = [
         {key: 'HIGH_TECHNOLOGY_PROGRAM',label: '863计划'},
@@ -253,6 +316,7 @@ export default function StepOne(props) {
             <span className="label-gray mb-16">技术类型</span>
             <Form.Item
                 name="techType"
+                style={{width: '700px'}}
             >
                 <Select
                     allowClear
@@ -267,6 +331,7 @@ export default function StepOne(props) {
             <span className="label-gray mb-16">成果水平</span>
             <Form.Item
                 name="productionLevel"
+                style={{width: '700px'}}
             >
                 <Select
                     allowClear
@@ -305,6 +370,7 @@ export default function StepOne(props) {
             <span className="label-gray mb-16">评价方式</span>
             <Form.Item
                 name="evaluationWay"
+                style={{width: '700px'}}
             >
                 <Select
                     allowClear
@@ -328,6 +394,7 @@ export default function StepOne(props) {
             <span className="label-gray mb-16">所处阶段</span>
             <Form.Item
                 name="productionStage"
+                style={{width: '700px'}}
             >
                 <Select
                     allowClear
@@ -342,6 +409,7 @@ export default function StepOne(props) {
             <span className="label-gray mb-16">应用状态</span>
             <Form.Item
                 name="productionUseType"
+                style={{width: '700px'}}
             >
                 <Select
                     allowClear
@@ -382,9 +450,10 @@ export default function StepOne(props) {
                     listType="picture-card"
                     onPreview={handlePreview}
                     onSuccess={handelJishuListChange}
+                    showUploadList={{showRemoveIcon:false}}
                     >
                         {
-                            jishuList.length >= 1? null : uploadButton
+                            jishuList.length >= 3? null : uploadButton
                         }
                 </Upload>
             </Form.Item>
@@ -401,9 +470,10 @@ export default function StepOne(props) {
                     listType="picture-card"
                     className="step_one_upload"
                     onSuccess={handelWorksListChange}
+                    showUploadList={{showRemoveIcon:false}}
                     >
                         {
-                            worksList.length >= 1 ? null :uploadButton
+                            worksList.length >= 3 ? null :uploadButton
                         }
                 </Upload>
             </Form.Item>
@@ -487,9 +557,10 @@ export default function StepOne(props) {
                     listType="picture-card"
                     className="step_one_upload"
                     onSuccess={handelZuopingListChange}
+                    showUploadList={{showRemoveIcon:false}}
                     >
                         {
-                            zuopingList.length >= 1 ? null : uploadButton
+                            zuopingList.length >= 3 ? null : uploadButton
                         }
                 </Upload>
             </Form.Item>
@@ -516,14 +587,14 @@ export default function StepOne(props) {
             >
                 <Input placeholder="申请人/企业名称"/>
             </Form.Item>
-            <span className="label-gray mb-16">身份证号码（纳税识别号）</span>
+            {/* <span className="label-gray mb-16">身份证号码（纳税识别号）</span>
             <Form.Item
                 style={{width: '700px'}}
                 name="identityNumber"
                 rules={[{ required: true, message: '请输入身份证号码（纳税识别号）' }]}
             >
                 <Input placeholder="身份证号码（纳税识别号）"/>
-            </Form.Item>
+            </Form.Item> */}
             <span className="label-gray mb-16">商标（商号）类别</span>
             <Form.Item
                 style={{width: '700px'}}
@@ -545,9 +616,10 @@ export default function StepOne(props) {
                     listType="picture-card"
                     className="step_one_upload"
                     onSuccess={handelUseListChange}
+                    showUploadList={{showRemoveIcon:false}}
                     >
                         {
-                            useList.length >= 1 ? null : uploadButton
+                            useList.length >= 3 ? null : uploadButton
                         }
                 </Upload>
             </Form.Item>
@@ -572,9 +644,10 @@ export default function StepOne(props) {
                     className="step_one_upload"
                     onPreview={handlePreview}
                     onSuccess={handelShangbiaoListChange}
+                    showUploadList={{showRemoveIcon:false}}
                     >
                         {
-                            shangbiaoList.length >= 1 ? null : uploadButton
+                            shangbiaoList.length >= 3 ? null : uploadButton
                         }
                 </Upload>
             </Form.Item>
@@ -646,9 +719,10 @@ export default function StepOne(props) {
                     onPreview={handlePreview}
                     className="step_one_upload"
                     onSuccess={handelInvoiceListChange}
+                    showUploadList={{showRemoveIcon:false}}
                     >
                         {
-                            invoiceList.length >= 1 ? null : uploadButton
+                            invoiceList.length >= 3 ? null : uploadButton
                         }
                 </Upload>
             </Form.Item>
@@ -689,9 +763,10 @@ export default function StepOne(props) {
                     onPreview={handlePreview}
                     className="step_one_upload"
                     onSuccess={handelProgramListChange}
+                    showUploadList={{showRemoveIcon:false}}
                     >
                         {
-                            programList.length >= 1 ? null : uploadButton
+                            programList.length >= 3 ? null : uploadButton
                         }
                 </Upload>
             </Form.Item>
@@ -708,9 +783,10 @@ export default function StepOne(props) {
                     onPreview={handlePreview}
                     className="step_one_upload"
                     onSuccess={handelCompositionListChange}
+                    showUploadList={{showRemoveIcon:false}}
                     >
                         {
-                            compositionList.length >= 1 ? null : uploadButton
+                            compositionList.length >= 3 ? null : uploadButton
                         }
                 </Upload>
             </Form.Item>
@@ -735,9 +811,10 @@ export default function StepOne(props) {
                     onPreview={handlePreview}
                     className="step_one_upload"
                     onSuccess={handelFontListChange}
+                    showUploadList={{showRemoveIcon:false}}
                     >
                         {
-                            fontList.length >= 1 ? null : uploadButton
+                            fontList.length >= 3 ? null : uploadButton
                         }
                 </Upload>
             </Form.Item>
@@ -750,6 +827,7 @@ export default function StepOne(props) {
             <div className="flex-column-center pl-30 pt-20">
             <span className="label-gray mb-16">来源</span>
             <Form.Item
+                style={{width: '700px'}}
                 name="sourceType"
                 rules={[{ required: true, message: '请选择来源' }]}
             >
@@ -807,9 +885,10 @@ export default function StepOne(props) {
                     onPreview={handlePreview}
                     className="step_one_upload"
                     onSuccess={handelChuantogListChange}
+                    showUploadList={{showRemoveIcon:false}}
                     >
                         {
-                            chuantongList.length >= 1 ? null : uploadButton
+                            chuantongList.length >= 3 ? null : uploadButton
                         }
                 </Upload>
             </Form.Item>
@@ -819,70 +898,115 @@ export default function StepOne(props) {
 
     return (
         <div className="flex-center step_one">
-            <Form
-                name="basic"
-                onFinish={onFinish}
-                size="middle"
-            >
-                
-                {
-                    type==='technology'&&
-                    jishu
-                }
-
-                {
-                    type==='copyright'&&
-                    zuoping
-                }
-
-                {
-                    type==='trademark' &&
-                    shangbiao
-                }
-                {
-                    type==='origin'&&
-                    yuanchandi
-                }
-                {
-                    type==='tradition'&&
-                    chuangtongzhishi
-                }
-                
-                <Form.Item style={{width: '700px'}}>
-                    <Form.Item
-                        name="open"
-                        label="是否公开作品或存证文件"
-                        rules={[{ required: true, message: '请选择是否公开作品或存证文件' }]}
+            {
+                isCertification&&
+                <>
+                    <Form
+                        name="basic"
+                        onFinish={onFinish}
+                        size="middle"
                     >
-                        <Radio.Group>
-                            <Radio value='0'>是</Radio>
-                            <Radio value='1'>否</Radio>
-                        </Radio.Group>
-                    </Form.Item>
-                </Form.Item>
+                        
+                        {
+                            type==='TECH_TYPE'&&
+                            jishu
+                        }
 
-                <Form.Item>
-                    <Checkbox>
-                        <span className="label-gray">
-                                已确认遵守
-                        </span>
-                        <span className="font-main ft-size-18">《原创性声明》</span>
-                    </Checkbox>
-                </Form.Item>
-        
-                <Form.Item style={{width: '700px'}}>
-                    <Button type="primary" htmlType="submit" style={{width: '100%'}}>
-                        下一步
-                    </Button>
-                </Form.Item>
-            </Form>
-            <Modal
-                visible={previewVisible}
-                footer={null}
-                onCancel={handleCancel}
-                >
-                <img alt="example" style={{ width: '100%' }} src={previewImage} />
-            </Modal>
+                        {
+                            type==='COPYRIGHT_TYPE'&&
+                            zuoping
+                        }
+
+                        {
+                            type==='BRAND_TYPE' &&
+                            shangbiao
+                        }
+                        {
+                            type==='SOURCE_TYPE'&&
+                            yuanchandi
+                        }
+                        {
+                            type==='TRADITION_TYPE'&&
+                            chuangtongzhishi
+                        }
+                        
+                        <Form.Item style={{width: '700px'}}>
+                            <Form.Item
+                                name="openType"
+                                label="是否公开作品或存证文件"
+                                rules={[{ required: true, message: '请选择是否公开作品或存证文件' }]}
+                            >
+                                <Radio.Group>
+                                    <Radio value={true}>是</Radio>
+                                    <Radio value={false}>否</Radio>
+                                </Radio.Group>
+                            </Form.Item>
+                        </Form.Item>
+
+                        <Form.Item>
+                            <Checkbox checked={isChooseChekbox} onChange={(e) => setIsChooseChekbox(e.target.checked)}>
+                                <span className="label-gray">
+                                        已确认遵守
+                                </span>
+                            </Checkbox>
+                            <span className="font-main ft-size-18 curser-pointer" onClick={handelClickDesc}>《原创性声明》</span>
+                        </Form.Item>
+                
+                        <Form.Item style={{width: '700px'}}>
+                            <Button type="primary" htmlType="submit" style={{width: '100%'}} disabled={!isChooseChekbox}>
+                                下一步
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                    <Modal
+                        visible={previewVisible}
+                        footer={null}
+                        onCancel={handleCancel}
+                        >
+                        <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                    </Modal>
+                    <Modal
+                        visible={descModal}
+                        className="description_mmodal"
+                        maskClosable={true}
+                        onCancel={() => setDescModal(false)}
+                        centered={true}
+                        >
+                        <div>
+                            <div className="description_modal_content flex-column-center-center">
+                                <div className="description_modal_name">原创性声明</div>
+                                <div className="description_modal_desc">
+                                “至泰链”原创认证服务平台致力于为用户提供原创性作品数字存证服务，禁止一切抄袭、
+                                盗版等不符合国家有关规定以及本平台管理规范的作品。为此，本单位（个人）在使用“至泰链”原创认证平台前作出如下声明:
+                                </div>
+                                <div className="description_modal_list">
+                                    1.本单位（本人）上传的所有作品，保证为本单位（本人）原创，没有任何拼接、抄袭、盗用、重复他人作品等非原创创作手段；<br/>
+                                    2.本单位（本人）上传的所有作品，保证符合国家有关规定，无法律法规禁止的任何内容；<br/>
+                                    3.本单位（本人）上传的所有作品，无色情低俗类作品；<br/>
+                                    4.本单位（本人）上传的所有作品，不包含第三方LOGO和名称违规盗用行为；<br/>
+                                    5.本单位（本人）上传的所有作品，为本上传人享有完整权利的作品；如涉及第三方的权利，须有第三方的授权方能上传。<br/>
+                                    本单位（本人）完全意识到本声明的法律责任，由此产生的法律后果由本单位（本人）承担。<br/>
+                                </div>
+                            </div>
+                        </div>
+                    </Modal>
+                </>
+            }
+            {
+                !isCertification&&
+                    <div className="flex-column-center-center">
+                        <div className="flex-column-center-center mb-70">
+                            <img src={require('src/images/user_not_works.png')} alt=""/>
+                            <div className="color-secondry">
+                                您还没有实名认证
+                                <span className="font-main ml-10 curser-pointer" onClick={handelClickCertification}>
+                                    立即认证
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                
+            }
         </div>
     )
 }

@@ -10,7 +10,7 @@ export default function StepFive(props) {
     useEffect(() => {
         if(props.worksInfo) {
             console.log(props.worksInfo)
-            copyrightVerifyInfo({'relevanceId': props.worksInfo.id}).then((res) => {
+            copyrightVerifyInfo({'relevanceId': props.worksInfo.id, copyrightRegister: props.worksInfo.copyrightRegister}).then((res) => {
                 setDetail(res.data)
             })
         }
@@ -18,7 +18,7 @@ export default function StepFive(props) {
 
     useEffect(() => {
         setTimeout(() => {
-            props.handelStepFiveSubmit()
+            // props.handelStepFiveSubmit()
         }, 10000);
       } ,[props])
 
@@ -33,7 +33,15 @@ export default function StepFive(props) {
     return (
         <div className="flex-column-center-center">
             <div className="flex-column-center-center mb-20">
-                <div className="step-four-top-box"></div>
+                <div className="step_five">
+                    <svg viewBox="0 0 120 120" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                        {/* <circle class="load one" cx="60" cy="60" r="60" />
+                        <circle class="load two" cx="60" cy="60" r="60" />
+                        <circle class="load three" cx="60" cy="60" r="60" /> */}
+                        <polyline fill="none" stroke="#C8DDFD" stroke-width="8" points="22,65 50,90 110,14" stroke-linecap="round" stroke-linejoin="round" class="tick"></polyline>
+                        
+                    </svg>
+                </div>
                 <div className="font-main ft-size-24 font-weight">
                     上链完成
                 </div>

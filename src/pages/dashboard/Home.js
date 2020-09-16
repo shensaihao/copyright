@@ -1,23 +1,36 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Slider from "react-slick";
 import { useHistory } from 'react-router-dom'
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import cs from 'classnames'
+import {message} from 'antd';
+import * as actions from 'src/store/actions';
+import { useDispatch, useSelector } from 'react-redux';
+
+import {homeService, useLoading, mineService, copyrightService} from 'src/service';
 
 export default function Home() {
     const settings = {
         dots: false,
         infinite: false,
+        arrows: true, 
         speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1
+        slidesToShow: 4,
+        slidesToScroll: 4
     };
     const [isDetail1Open, setIsDetail1Open] = useState(false)
     const [isDetail2Open, setIsDetail2Open] = useState(false)
+    const [openList, setOpenList] = useState([])
     const [isHover, setIsHover] = useState(false)
+    const [search, setSearch] = useState('')
+    const [loading, getAllByCondition] = useLoading(copyrightService.getAllByCondition)
+    const [loading1, getAuthLogout] = useLoading(mineService.getAuthLogout)
 
     const history = useHistory()
+    const dispatch = useDispatch()
+    const user = useSelector(state => state.user)
+    const login = useSelector(state => state.login)
 
     function handelClickGotoWorks (type) {
         if (type) {
@@ -25,6 +38,48 @@ export default function Home() {
         }
     }
 
+    useEffect(() => {
+        getAllByCondition({page: 1, size: 12}).then((res) => {
+            setOpenList(res.data.records)
+        }).catch((res) => {
+            if (res.responseCode==='_501') {
+                message.warning('登录已过期')
+                history.push('/login')
+            } else {
+                message.warning(res.errorMsg)
+            }
+        })
+    }, [getAllByCondition, history])
+
+    const handelKeyDownSearch = (e) => {
+        if (e.keyCode === 13&&search) {
+            history.push(`/workslist?productionName=${search}`)
+        }
+    }
+
+    const handelClickWorksItem = (id) => {
+        history.push(`/worksdetail?id=${id}`)
+    }
+
+    const handelClickLogout = () => {
+        getAuthLogout().then(() => {
+            message.success('退出登录成功')
+            dispatch(actions.setLogin(false))
+            history.push('/login')
+        }).catch(() => {
+            history.push('/login')
+            dispatch(actions.setLogin(false))
+            message.success('退出登录成功')
+        })
+    }
+
+    const getImageList = (list) => {
+        if (list) {
+            const newArr = list.split(",")
+            if (newArr) return newArr[0]
+            else return list
+        }
+    }
 
     const HomeHeader = (
         <div className="home_header">
@@ -32,7 +87,7 @@ export default function Home() {
                 <img src={require('src/images/home_logo.png')} alt=""/>
                 <div className="home_header_search_input flex-start pl-10">
                     <img src={require('src/images/home_search_icon.png')} alt=""/>
-                    <input type="text" className="home_search_input ml-10"/>
+                    <input value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={handelKeyDownSearch} type="text" className="home_search_input ml-10"/>
                 </div>
             </div>
             <div className="home_header_banner flex-between-center">
@@ -42,17 +97,49 @@ export default function Home() {
                 </div>
                 <div className="home_header_banner_user">
                     <div className="home_header_banner_user_bg">
-                        <div className="home_header_user_logout">退出登录</div>
-                        <div className="flex-center-center font-weight-bold ft-size-20 color-main mb-10">
-                            <span className="font-main ft-size-24 mr-10">23</span>件作品已认证
-                        </div>
-                        <div className="flex-center-center font-weight-bold ft-size-20 color-main">
-                            <span className="font-main ft-size-24 mr-10">23</span>家企业已加入认证
-                        </div>
+                        {
+                            login&&
+                            <>
+                                <div className="home_header_user_logout flex-start curser-pointer" onClick={handelClickLogout}>
+                                    <img className="mr-5" src={require('src/images/home_logout_icon.png')} alt=""/>
+                                    退出
+                                </div>
+                                <div className="flex-center-center font-weight-bold ft-size-20 color-main mb-10">
+                                    <span className="font-main ft-size-24 mr-10">23</span>件作品已认证
+                                </div>
+                                <div className="flex-center-center font-weight-bold ft-size-20 color-main">
+                                    <span className="font-main ft-size-24 mr-10">23</span>家企业已加入认证
+                                </div>
+                            </>
+                        }
+                        {
+                            !login&&
+                            <>
+                                <div className="flex-center-center font-weight-bold ft-size-20 color-main mb-10 pt-60">
+                                    <span className="font-main ft-size-24 mr-10">23</span>件作品已认证
+                                </div>
+                                <div className="flex-center-center font-weight-bold ft-size-20 color-main">
+                                    <span className="font-main ft-size-24 mr-10">23</span>家企业已加入认证
+                                </div>
+                            </>
+                        }
                     </div>
                     <div className="home_header_banner_user_modify flex-column-center-center">
-                        <div className="home_header_certificationome_btn">实名认证</div>
-                        <div className="home_header_user_cneter">个人中心</div>
+                        {
+                            !user.authenticationType&&login&&
+                            <>
+                                <div className="home_header_certificationome_btn curser-pointer mt-30" onClick={() => history.push('/certification')}>实名认证</div>
+                                <div className="home_header_user_cneter curser-pointer" onClick={() => history.push('/copyrightlist')}>个人中心</div>
+                            </>
+                        }
+                        {
+                            login&&user.authenticationType&&
+                            <div className="home_header_certificationome_btn curser-pointer mt-40" onClick={() => history.push('/copyrightlist')}>个人中心</div>
+                        }
+                        {
+                            !login&&
+                            <div className="home_header_login_btn curser-pointer mt-40" onClick={() => history.push('/login')}>登录</div>
+                        }
                     </div>
                 </div>
             </div>
@@ -61,14 +148,10 @@ export default function Home() {
 
     const CertificationServices = (
         <div className="home_certification">
-            <div className="home_certification_title flex-column-center-center">
+            <div className="home_certification_title flex-column-center-center mb-40">
                 <div className="home_certification_title_name">多种认证服务</div>
                 <div className="home_certification_title_desc mt-10">平台为您提供多种认证服务，所有认证信息均在区块链上进行登记</div>
                 <div className="home_certification_line"></div>
-            </div>
-            <div className="flex-between-center home_certification_more_more_box">
-                <div></div>
-                <div className="home_certification_more">查看更多</div>
             </div>
             <div className="home_certification_swiper">
                 <div className="flex-between-center">
@@ -76,7 +159,7 @@ export default function Home() {
                         <div className="slide_item_normal mr-20  flex-column-center-center">
                             <img className="slide_item_normal_img mb-20" src={require('src/images/banquan_logo.png')} alt=""/>
                             <div className="slide_item_normal_title mb-15">版权认证</div>
-                            <div className="slide_item_normal_lable mb-15 text-center">包含文字作品，音乐舞蹈，美术，建筑，电影模型，计算机软件等作品。</div>
+                            <div className="slide_item_normal_lable mb-15 text-center">包含文字作品,音乐舞蹈,美术,建筑,电影模型,计算机软件等作品。</div>
                             <div className="slide_item_normal_line mb-20"></div>
                             <div className="slide_item_normal_btn flex-center-center">去认证</div>
                         </div>
@@ -92,7 +175,7 @@ export default function Home() {
                                 节省了律师取证、公证处公证、真实无篡改鉴定等各种耗费大量人力物力的线下过程。
                             </div>
                             <div className="slide_item_normal_line mb-20"></div>
-                            <div className="slide_item_normal_btn flex-center-center curser-pointer" onClick={() => handelClickGotoWorks('copyright')}>去认证</div>
+                            <div className="slide_item_normal_btn flex-center-center curser-pointer" onClick={() => handelClickGotoWorks('COPYRIGHT_TYPE')}>去认证</div>
                         </div>
                     </div>
                     <div className="slide_shangbiao">
@@ -115,7 +198,7 @@ export default function Home() {
                                 确认所有人使用该商标与商号的时间，固化保全所有人在商标经核准注册前使用该商标的事实。
                             </div>
                             <div className="slide_item_normal_line mb-20"></div>
-                            <div className="slide_item_normal_btn flex-center-center curser-pointer" onClick={() => handelClickGotoWorks('trademark')}>去认证</div>
+                            <div className="slide_item_normal_btn flex-center-center curser-pointer" onClick={() => handelClickGotoWorks('BRAND_TYPE')}>去认证</div>
                         </div>
                     </div>
                     <div className="slide_jishu">
@@ -137,7 +220,7 @@ export default function Home() {
                                 通过上传平台存证、认证，从而实现相应成果的前置保护。
                             </div>
                             <div className="slide_item_normal_line mb-20"></div>
-                            <div className="slide_item_normal_btn flex-center-center curser-pointer" onClick={() => handelClickGotoWorks('technology')}>去认证</div>
+                            <div className="slide_item_normal_btn flex-center-center curser-pointer" onClick={() => handelClickGotoWorks('TECH_TYPE')}>去认证</div>
                         </div>
                     </div>
                     <div className={cs('slide_yuanchandi',{'display-none':isHover,'display-block':!isHover} )} >
@@ -158,7 +241,7 @@ export default function Home() {
                                 平台对资料进行认证，并提供认证证书，标注该商品源于某一特定地点。用于确定商品原产地的资料和信息。
                             </div>
                             <div className="slide_item_normal_line mb-20"></div>
-                            <div className="slide_item_normal_btn flex-center-center curser-pointer" onClick={() => handelClickGotoWorks('origin')}>去认证</div>
+                            <div className="slide_item_normal_btn flex-center-center curser-pointer" onClick={() => handelClickGotoWorks('SOURCE_TYPE')}>去认证</div>
                         </div>
                     </div>
                     
@@ -182,7 +265,7 @@ export default function Home() {
                                 确保其有关权利的实现与转化，并获得必要的人身权与惠益分享等财产权。
                             </div>
                             <div className="slide_item_normal_line mb-20"></div>
-                            <div className="slide_item_normal_btn flex-center-center curser-pointer" onClick={() => handelClickGotoWorks('tradition')}>去认证</div>
+                            <div className="slide_item_normal_btn flex-center-center curser-pointer" onClick={() => handelClickGotoWorks('TRADITION_TYPE')}>去认证</div>
                         </div>
                     </div>
                 </div>
@@ -191,26 +274,40 @@ export default function Home() {
     )
 
     const WorksList = (
-        <div className="home_works">
-            <div className="home_works_title flex-column-center-center">
-                <div className="home_works_title_name">作品展示</div>
-                <div className="home_works_title_desc mt-10">平台已认证作品展示</div>
-                <div className="home_works_line"></div>
-            </div>
-            <div className="home_works_swiper">
-                <Slider {...settings}>
-                    <div className="home_works_box">
-                        <div className="home_works_item"></div>
+        <>
+            {
+                openList.length>0&& <div className="home_works">
+                    <div className="home_works_title flex-column-center-center">
+                        <div className="home_works_title_name">作品展示</div>
+                        <div className="home_works_title_desc mt-10">平台已认证作品展示</div>
+                        <div className="home_works_line"></div>
                     </div>
-                    <div className="home_works_box">
-                        <div className="home_works_item"></div>
+                    <div className="flex-between-center home_certification_more_more_box">
+                        <div></div>
+                        <div className="home_certification_more curser-pointer" onClick={() => history.push('/workslist')}>查看更多</div>
                     </div>
-                    <div className="home_works_box">
-                        <div className="home_works_item"></div>
+                    <div className="home_works_swiper">
+                        <Slider {...settings}>
+                            {   
+                                openList&&openList.map((item, index) => {
+                                    return (
+                                        <div key={index} className="home_works_item flex-center-center curser-pointer" onClick={() => handelClickWorksItem(item.id)}>
+                                            <img src={getImageList(item.productionCheck)} alt=""/>
+                                            <div className="home_works_item_info flex-column-center pl-20">
+                                                <div className="ft-size-16 pt-5">《{item.productionName}》</div>
+                                                <div className="ft-size-14 text-overflow pr-20">哈希：{item.messageChainHash}</div>
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                                
+                            }
+                        </Slider>
                     </div>
-                </Slider>
-            </div>
-        </div>
+                </div>
+            }
+        </>
+        
     )
 
     const PlatformAdvantage = (
@@ -232,8 +329,8 @@ export default function Home() {
                         <div className="ml-30 ft-size-20 font-weight color-main home_advantage_box_item_ziyuan_title">资源整合与专业服务优势</div>
                     </div>
                     <div className="ft-size-14 color-white home_advantage_box_item_ziyuan_after">
-                        “至泰链”原创认证服务平台由链博(成都)科技有限公司、成都恒道知识产权与科技创新研究院等单位联合打造病负责运营，其中，链博(成都)科技有限公司负责平台的技术服务支持，
-                        成都恒道知识产权与科技创新研究院负责专业服务支持；此外，平台还组建国一支运营团队，联合平台各方资源，为用户提供专业化服务。
+                    “至泰链”原创认证服务平台由链博(成都)科技有限公司、成都恒道知识产权与科技创新研究院等单位联合打造并负责运营，其中，链博(成都)科技有限公司负责平台的技术服务支持，
+        成都恒道知识产权与科技创新研究院负责专业服务支持；此外，平台还组建过一支运营团队，联合平台各方资源，为用户提供专业化服务。
                     </div>
                 </div>
                 <div className="home_advantage_box_item home_advantage_box_item_quanwei flex-column-center-center mb-20">
@@ -255,10 +352,8 @@ export default function Home() {
                         <div className="ml-30 ft-size-20 font-weight color-main home_advantage_box_item_xueshu_title">学术研究与实战经验优势</div>
                     </div>
                     <div className="ft-size-14 color-white home_advantage_box_item_xueshu_after">
-                        平台以时间戳技术、数字签名、哈希等数字认证方式，实时保存创作过程和结果，将原创作品作为证据固化保全，
-                        形成严谨的证据链，为创作者提供维权时作为司法采集的电子证据。平台通过了国家工信部的相关备案和认证，
-                        具有高度的权威性。在服务方面，平台致力于知识产权确权、维权、用权的全链条服务，同时，
-                        平台还整合企业管理咨询、法律服务等资源，为用户提供全方位、一站式服务，助力企业发展。
+                    平台合作方之一的链博(成都)科技有限公司是区块链领域技术领先的一家企业，开发出多项基于区块链的技术解决方案；
+                    成都恒道知识产权与科技创新研究院为省内知名的知识产权研究机构，承担过国家级、省级的相关课题研究。
                     </div>
                 </div>
             </div>
@@ -321,7 +416,9 @@ export default function Home() {
                             !isDetail1Open ? 
                             <div className="home_partner_lable">
                                 成立于2018年3月，是业界领先的区块链技术及行业解决方案提供商、区块链+数字生态经济体构建者，
-                                拥有一支研究前沿、技术扎实、商业敏锐、执行力强、迭代高效的实战型团队......
+                                拥有一支研究前沿、技术扎实、商业敏锐、执行力强、迭代高效的实战型团队，在公链、联盟链、BaaS、
+                                跨链、共识算法、智能合约、数字钱包、资产交易、隐私保护等区块链以及大数据和机器学习领域拥有全栈技术能力和经验，
+                                为客户提供产业和商业数字化的底层技术解决方案和系统集成服务......
                             </div>
                             :
                             <div className="home_partner_lable">
@@ -338,16 +435,16 @@ export default function Home() {
                         <div className="flex-end curser-pointer">
                             {
                                 !isDetail1Open ? 
-                                <>
-                                    <div className="ft-size-14 color-white mr-5" onClick={() => setIsDetail1Open(true)}>展开</div>
+                                <div className="flex-start" onClick={() => setIsDetail1Open(true)}>
+                                    <div className="ft-size-14 color-white mr-5">展开</div>
                                     <img src={require('src/images/home_open_icon.png')} alt=""/>
-                                </>
+                                </div>
                                 
                                 :
-                                <>
-                                    <div className="ft-size-14 color-white mr-5" onClick={() => setIsDetail1Open(false)}>收起</div>
+                                <div className="flex-start" onClick={() => setIsDetail1Open(false)}>
+                                    <div className="ft-size-14 color-white mr-5">收起</div>
                                     <img src={require('src/images/home_open_icon.png')} className="is-rotate" alt=""/>
-                                </>
+                                </div>
                             }
                             
                         </div>
@@ -365,7 +462,8 @@ export default function Home() {
                             !isDetail2Open ? 
                             <div className="home_partner_lable">
                                 成立于2015年9月，由四川省内从业多年具有经验的知识产权代理机构作为发起人，
-                                在国家相关部门登记注册并拥有独立法人资格的民办非营利性研究机构。研究院聚集一批在知识产权战......
+                                在国家相关部门登记注册并拥有独立法人资格的民办非营利性研究机构。研究院聚集一批在知识产权战研究院聚集一批在知识产权战略理论与实务方面造诣很高的权威专家，
+                                组建具有高水准的研究团队......
                             </div>
                             :
                             <div className="home_partner_lable">
@@ -378,15 +476,15 @@ export default function Home() {
                         <div className="flex-end curser-pointer">
                             {
                                 !isDetail2Open ?
-                                <>
-                                    <div className="ft-size-14 color-white mr-5" onClick={() => setIsDetail2Open(true)}>展开</div>
+                                <div className="flex-start" onClick={() => setIsDetail2Open(true)}>
+                                    <div className="ft-size-14 color-white mr-5">展开</div>
                                     <img src={require('src/images/home_open_icon.png')} alt=""/>
-                                </>
+                                </div>
                                 :
-                                <>
-                                    <div className="ft-size-14 color-white mr-5" onClick={() => setIsDetail2Open(false)}>收起</div>
+                                <div className="flex-start" onClick={() => setIsDetail2Open(false)}>
+                                    <div className="ft-size-14 color-white mr-5">收起</div>
                                     <img src={require('src/images/home_open_icon.png')} className="is-rotate" alt=""/>
-                                </>
+                                </div>
                             }
                             
                         </div>
@@ -402,16 +500,17 @@ export default function Home() {
     const serviseSetting = {
         dots: true,
         infinite: true,
-        speed: 500,
+        autoplaySpeed: 2000,
         slidesToShow: 1,
-        slidesToScroll: 1
+        slidesToScroll: 1,
+        autoplay: true
     }
 
     const ValueAddedServices = (
         <div className="home_services">
             <div className="home_services_title flex-column-center-center">
-                <div className="home_services_title_name">多种认证服务</div>
-                <div className="home_services_title_desc mt-10">平台为您提供多种认证服务，所有认证信息均在区块链上进行登记</div>
+                <div className="home_services_title_name">增值服务</div>
+                <div className="home_services_title_desc mt-10">我们同时也提供其他增值服务，如果需要请电联</div>
                 <div className="home_services_line"></div>
             </div>
             <div className="home_services_swiper">
@@ -477,9 +576,9 @@ export default function Home() {
                     </div>
                 </Slider>
             </div>
-            <div className="flex-center-center">
-                <div className="home_services_button">立即登记</div>
-            </div>
+            {/* <div className="flex-center-center">
+                <div className="home_services_button curser-pointer">立即登记</div>
+            </div> */}
         </div>
     )
 

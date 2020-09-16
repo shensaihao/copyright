@@ -34,4 +34,14 @@ export default {
      */
     getPhoneNumberUsed: (data) => get(`/v1/user/findByTelephone`, data),
 
+    /**
+     * 获取用户作品
+     */
+    getOwnByCondition: (data) => get(`/v1/copyrightVerify/getOwnByCondition`, data),
+
+    /**
+     * 更改手机号
+     */
+    changeTelephone: (data) => get(`/v1/user/changeTelephone`, data),
+
 }

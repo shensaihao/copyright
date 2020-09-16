@@ -1,6 +1,6 @@
 // .home-banner
 //     width: 100%
-//     height ipx(450)
+//     height ivw(450)
 //     position relative
 //     background: url('images/home_bg.jpg') 100% 100% no-repeat
 //     background-size: 100% 100%
@@ -119,7 +119,7 @@
         padding: 0 120px
         height:58px;
         background:#ACCFFA;
-        opacity:0.3;
+        opacity:0.8;
     .home_header_search_logo
         width:123px;
         height:30px;
@@ -135,7 +135,6 @@
         padding: 0 120px
     .home_header_banner_name 
         font-size:24px;
-        font-family:Source Han Sans CN;
         font-weight:bold;
         color:rgba(255,255,255,1);
         line-height:13px;
@@ -156,10 +155,12 @@
             background-size: 100% 100%
         .home_header_user_logout 
             font-size:16px;
-            font-family:Source Han Sans CN;
             font-weight:400;
             color:rgba(102,119,145,1);
             padding: 20px 20px
+            img 
+                width: 16px
+                height 16px
         .home_header_certificationome_btn
             width:150px;
             height:36px;
@@ -168,16 +169,23 @@
             background:rgba(6,101,206,1);
             border-radius:6px;
             font-size:18px;
-            font-family:Source Han Sans CN;
             font-weight:400;
             color:rgba(255,255,255,1);
-            margin-top: 30px
         .home_header_user_cneter
             font-size:18px;
-            font-family:Source Han Sans CN;
             font-weight:400;
             color:rgba(6,101,206,1);
             line-height: 36px
+        .home_header_login_btn
+            width:150px;
+            height:36px;
+            line-height: 36px
+            text-align: center
+            background:rgba(6,101,206,1);
+            border-radius:6px;
+            font-size:18px;
+            font-weight:400;
+            color:rgba(255,255,255,1);
 .home_certification
     padding: 80px 0
     width: 100%
@@ -186,13 +194,11 @@
     overflow hidden
     .home_certification_title_name
         font-size:32px;
-        font-family:Source Han Sans CN;
         font-weight:bold;
         color:rgba(40,45,80,1);
         line-height:36px;
     .home_certification_title_desc
         font-size:16px;
-        font-family:Source Han Sans CN;
         font-weight:400;
         color:rgba(102,119,145,1);
         line-height:36px;
@@ -205,7 +211,6 @@
         padding: 0 120px
     .home_certification_more
         font-size:16px;
-        font-family:Source Han Sans CN;
         font-weight:400;
         color:rgba(6,101,206,1);
         line-height:36px;
@@ -224,14 +229,14 @@
                     height 80px
                 .slide_item_normal_title
                     font-size:20px;
-                    font-family:Source Han Sans CN;
+        
                     font-weight:bold;
                     color:rgba(40,45,80,1);
                     line-height:36px;
                 .slide_item_normal_lable
                     padding: 0 30px
                     font-size:14px;
-                    font-family:Source Han Sans CN;
+        
                     font-weight:400;
                     color:rgba(102,119,145,1);
                     line-height:22px;
@@ -265,13 +270,11 @@
                     padding: 15px 8px 15px 15px
                 .slide_item_normal_title
                     font-size: 20px;
-                    font-family: Source Han Sans CN;
                     font-weight: bold;
                     color: #FFFFFF;
                     line-height: 36px;
                 .slide_item_normal_lable
                     font-size: 14px;
-                    font-family: Source Han Sans CN;
                     font-weight: 400;
                     color: #FFFFFF;
                     line-height: 22px;
@@ -294,7 +297,7 @@
                     border: 1px solid #FFFFFF;
                     border-radius:6px;
                     font-size:16px;
-                    font-family:Source Han Sans CN;
+        
                     font-weight:400;
                     color:rgba(255,255,255,1);
                     line-height:20px;
@@ -344,13 +347,11 @@
     background: #FFFFFF;
     .home_works_title_name
         font-size:32px;
-        font-family:Source Han Sans CN;
         font-weight:bold;
         color:rgba(40,45,80,1);
         line-height:36px;
     .home_works_title_desc
         font-size:16px;
-        font-family:Source Han Sans CN;
         font-weight:400;
         color:rgba(102,119,145,1);
         line-height:36px;
@@ -361,17 +362,56 @@
         margin-top: 13px
         margin-bottom: 20px
     .home_works_swiper
+        padding: 0 120px
         .slick-slider
             padding: 0 120px
             left 0
             righ 0
             margin: auto
             .home_works_item
-                width: 253px;
+                width: 253px !important;
                 height: 315px;
                 background: #FFFFFF;
-                border: 1px solid #D8DDE2;
+                border: 1px solid #D9DDE2;
                 border-radius: 24px;
+                overflow hidden
+                img 
+                    width: 100%;
+            .slick-arrow.slick-prev
+                width: 42px;
+                height: 316px;
+                background-color: #FFFFFF;
+                color: #BFD6EE
+                background-image: url('images/home_slide_arrow_left.png')
+                background-repeat: no-repeat
+                background-position-x: 50%
+                background-position-y: 50%
+                background-size: 14px 24px
+            .slick-arrow.slick-next
+                width: 42px;
+                height: 316px;
+                background-color: #FFFFFF;
+                color: #BFD6EE
+                background-image: url('images/home_slide_arrow_right.png')
+                background-repeat: no-repeat
+                background-position-x: 50%
+                background-position-y: 50%
+                background-size: 14px 24px
+            .slick-prev:before, .slick-next:before
+                display: none
+            .slick-arrow:hover
+                background-color: #F0F5FA !important;
+
+    .home_certification_more_more_box
+        padding: 0 120px
+    .home_certification_more
+        font-size:16px;
+        font-weight:400;
+        color:rgba(6,101,206,1);
+        line-height:36px;
+@media screen and (max-width: 1500px)
+    .home_works .home_works_swiper .slick-slider
+        padding 0 0 0 50px !important
 
 .home_process
     padding: 80px 120px
@@ -379,13 +419,11 @@
     background: #2B63BD;
     .home_process_title_name
         font-size:32px;
-        font-family:Source Han Sans CN;
         font-weight:bold;
         color: #FFFFFF;
         line-height:36px;
     .home_process_title_desc
         font-size:16px;
-        font-family:Source Han Sans CN;
         font-weight:400;
         color: #FFFFFF;
         line-height:36px;
@@ -402,7 +440,6 @@
     .home_step_title_box
         .home_process_title
             font-size: 20px;
-            font-family: Source Han Sans CN;
             font-weight: bold;
             color: #FFFFFF;
             line-height: 36px;
@@ -557,13 +594,11 @@
     overflow hidden
     .home_services_title_name
         font-size:32px;
-        font-family:Source Han Sans CN;
         font-weight:bold;
         color:rgba(40,45,80,1);
         line-height:36px;
     .home_services_title_desc
         font-size:16px;
-        font-family:Source Han Sans CN;
         font-weight:400;
         color:rgba(102,119,145,1);
         line-height:36px;
@@ -574,10 +609,8 @@
         margin-top: 13px
         margin-bottom: 40px
     .slick-list
-        height: 184px;
-        background: #FFFFFF;
-        box-shadow: 0px 10px 16px 2px rgba(203, 212, 221, 0.16);
-        border-radius: 24px;
+        justify-content: center
+        align-items: center
     .home_services_box
         position relative
         height: 184px;
@@ -641,5 +674,382 @@
   -ms-transform: rotate(180deg);
   transform: rotate(180deg);
 }   
-
-
+.home_works_item
+    position relative
+.home_works_item_info
+    position: absolute
+    bottom: 0
+    width: 253px;
+    height: 58px;
+    background: #0666CE;
+    border-radius: 0 0 24px 24px;
+    color: #ffffff
+    display: none
+.home_works_item:hover
+    border: 1px solid #0666CE !important
+    .home_works_item_info
+        display: block
+.h5_home_top_content
+    width: 100%
+    margin-top: ivw(88)
+    padding: ivw(139) ivw(69)
+    background: url('images/h5_top_bg.png') no-repeat
+    .h5_home_top_title
+        font-size: ivw(66);
+        font-family: PangMenZhengDao;
+        font-weight: bold;
+        color: #FFFFFF;
+        text-align: center
+    .h5_home_top_desc
+        font-size: ivw(24);
+        font-weight: bold;
+        color: #FFFFFF;
+        text-align: center
+.h5_home_service_box
+    background: #F5F8FB;
+    padding: ivw(80) ivw(40)
+    .h5_home_certification_title_desc
+        font-size: ivw(34);
+        font-weight: bold;
+        color: #282E50;
+        line-height: ivw(36);
+    .h5_home_certification_line
+        width: ivw(156);
+        height: ivw(5);
+        background: #0666CE;
+        margin-top: ivw(30)
+        margin-bottom: ivw(40)
+    .h5_home_service_box_services_item
+        width: ivw(320);
+        height: ivw(402);
+        background: #FFFFFF;
+        box-shadow: ivw(1) ivw(10) ivw(17) ivw(2) rgba(203, 212, 221, 0.16);
+        border-radius: ivw(24);
+        padding: ivw(14) ivw(40)
+        margin-bottom: ivw(30)
+        .h5_home_service_box_services_item_img
+            width: ivw(90)
+            height ivw(90)
+            margin-bottom: ivw(20)
+            img 
+                width: ivw(90)
+                height ivw(90)
+        .h5_home_service_box_services_item_title
+            font-size: ivw(26);
+            font-weight: bold;
+            color: #282E50;
+            line-height: ivw(36);
+            margin-bottom: ivw(20)
+        .h5_home_service_box_services_item_desc
+            font-size: ivw(24);
+            font-weight: 400;
+            color: #667892;
+            line-height: ivw(44);
+.h5_home_works_box
+    background: #FFFFFF;
+    padding: ivw(128) ivw(25)
+    .h5_home_works_title_desc
+        font-size: ivw(34);
+        font-weight: bold;
+        color: #282E50;
+        line-height: ivw(36);
+    .h5_home_works_line
+        width: ivw(156);
+        height: ivw(5);
+        background: #0666CE;
+        margin-top: ivw(30)
+        margin-bottom: ivw(40)
+    .h5_works_item_box
+        width: ivw(348);
+        height: ivw(560);
+        border-radius: ivw(24);
+        padding: ivw(15)
+    .h5_works_item_box:active
+        background: #DDECFD;
+    .h5_works_item_image
+        width: ivw(320);
+        height ivw(396)
+        background: #FFFFFF;
+        border: ivw(1) solid #D8DDE2;
+        border-radius: ivw(24);
+        overflow hidden
+        img 
+            width: 100%;
+    .h5_works_item_name
+        font-size: ivw(26);
+        font-weight: bold;
+        color: #282E50;
+        line-height: ivw(36);
+        margin: ivw(5) 0
+    .h5_works_item_date
+        font-size: ivw(24);
+        font-weight: 400;
+        color: #667892;
+        line-height: ivw(36);
+        opacity: 0.7;
+    .h5_works_item_tag
+        font-size: ivw(26);
+        font-weight: bold;
+        color: #667892;
+        opacity: 0.7;
+        margin: ivw(5) 0
+        line-height: ivw(36);
+.h5_home_advantage
+    background-color: #F5F8FB;
+    padding: ivw(80) ivw(40)
+    background-image: url('images/h5_homr_advantage_bg.png')
+    background-repeat: no-repeat
+    background-size: contain
+    background-position-x: ivw(28)
+    .h5_home_advantage_title_desc
+        font-size: ivw(34);
+        font-weight: bold;
+        color: #282E50;
+        line-height: ivw(36);
+    .h5_home_advantage_line
+        width: ivw(156);
+        height: ivw(5);
+        background: #0666CE;
+        margin-top: ivw(30)
+        margin-bottom: ivw(40)
+    .h5_home_advantage_list_item
+        width: 100%
+        height: ivw(118);
+        background: #FFFFFF;
+        box-shadow: ivw(1) ivw(10) ivw(17) ivw(2) rgba(203, 212, 221, 0.16);
+        border-radius: ivw(24);
+        margin-bottom: ivw(30)
+        img 
+            width: ivw(60)
+            height ivw(60)
+    .h5_home_advantage_list_item_name
+        font-size: ivw(28);
+        font-weight: bold;
+        color: #282E50;
+        line-height: ivw(36);
+        margin-left: ivw(30)
+.h5_home_process
+    background-color: #2C64BE;
+    padding: ivw(80) ivw(40)
+    .h5_home_process_title_desc
+        font-size: ivw(34);
+        font-weight: bold;
+        color: #ffffff;
+        line-height: ivw(36);
+    .h5_home_process_line
+        width: ivw(156);
+        height: ivw(5);
+        background: #ffffff;
+        margin-top: ivw(30)
+        margin-bottom: ivw(40)
+    .h5_home_process_content
+        height ivw(888)
+        background: url('images/h5_process_bg.png') no-repeat
+        background-size: contain
+    .h5_home_process_step_img
+        width: ivw(125)
+        height ivw(125)
+        margin-right: ivw(30)
+    .h5_home_process_step_name
+        font-size: ivw(28);
+        font-weight: bold;
+        color: #FFFFFF;
+        line-height: ivw(36);
+        opacity: 0.7;
+    .h5_home_process_step_desc
+        font-size: ivw(24);
+        font-weight: 400;
+        color: #FFFFFF;
+        line-height: ivw(36);
+        opacity: 0.7;
+        margin-right: ivw(10)
+    .h5_home_process_step_step
+        font-size: ivw(64);
+        font-weight: bold;
+        color: #FFFFFF;
+        line-height: ivw(36);
+        opacity: 0.7;
+.h5_home_templete
+    background-color: #F5F8FB;
+    padding: ivw(80) ivw(40)
+    background-image: url('images/h5_home_templete_bg.png')
+    background-repeat: no-repeat
+    background-size: contain
+    background-position-x: ivw(19)
+    .h5_home_templete_title_desc
+        font-size: ivw(34);
+        font-weight: bold;
+        color: #282D50;
+        line-height: ivw(36);
+    .h5_home_templete_line
+        width: ivw(156);
+        height: ivw(5);
+        background: #0665CE;
+        margin-top: ivw(30)
+        margin-bottom: ivw(40)
+    .h5_home_templete_temp
+        background-image: url('images/h5_home_templete_temp.png')
+        background-repeat: no-repeat
+        background-size: cover
+        width: ivw(648)
+        height ivw(436)
+.h5_home_partner
+    background: #2B63BD;
+    padding: ivw(80) ivw(40)
+    .h5_home_partner_title_desc
+        font-size: ivw(34);
+        font-weight: bold;
+        color: #ffffff;
+        line-height: ivw(36);
+    .h5_home_partner_line
+        width: ivw(156);
+        height: ivw(5);
+        background: #ffffff;
+        margin-top: ivw(30)
+        margin-bottom: ivw(40)
+    .h5_home_partner_item_top_one
+        width: ivw(670);
+        height: ivw(160)
+        background: #FFFFFF;
+        box-shadow: 0px ivw(10) ivw(16) ivw(2) rgba(203, 212, 221, 0.16);
+        border-radius: ivw(24);
+        img 
+            width: ivw(288)
+            height ivw(63)
+    .h5_home_partner_item_top_two
+        width: ivw(670);
+        height: ivw(160)
+        background: #FFFFFF;
+        box-shadow: 0px ivw(10) ivw(16) ivw(2) rgba(203, 212, 221, 0.16);
+        border-radius: ivw(24);
+        img 
+            width: ivw(107)
+            height ivw(131)
+    .h5_home_partner_item_top_name
+        font-size: ivw(28);
+        font-weight: bold;
+        color: #FFFFFF;
+        line-height: ivw(36);
+        margin-top: ivw(40)
+        margin-bottom: ivw(20)
+    .h5_home_partner_item_top_desc
+        font-size: ivw(26);
+        font-weight: 400;
+        color: #FFFFFF;
+        line-height: ivw(48);
+        opacity: 0.7;
+    .h5_home_partner_item_top_more
+        margin-bottom: ivw(40)
+        img 
+            width: ivw(24)
+            height ivw(20)
+            margin-left: ivw(18)
+.h5_home_other_service
+    background-color: #F5F8FB;
+    padding: ivw(80) ivw(40)
+    background-image: url('images/h5_service_bg.png')
+    background-repeat: no-repeat
+    background-size: ivw(260) ivw(216)
+    background-position-x: 100%
+    .h5_home_other_service_title_desc
+        font-size: ivw(34);
+        font-weight: bold;
+        color: #282D50;
+        line-height: ivw(36);
+    .h5_home_other_service_line
+        width: ivw(156);
+        height: ivw(5);
+        background: #0665CE;
+        margin-top: ivw(30)
+    .h5_home_other_service_name_box
+        margin-top: ivw(40)
+        margin-bottom: ivw(20)
+        img 
+            width: ivw(50)
+            height ivw(50)
+            margin-right: ivw(18)
+.h5_home_other_service_desc
+    font-size: ivw(26);
+    font-weight: 400;
+    color: #667892;
+    line-height: ivw(48);
+    opacity: 0.7;
+.h5_footer
+    padding: ivw(80) ivw(40)
+    background: #FFFFFF;
+    .h5_footer_top
+        img 
+            width: ivw(151)
+            height ivw(151)
+    .h5_footer_top_title
+        font-size: ivw(24);
+        font-weight: 400;
+        color: #667892;
+        line-height: ivw(36);
+        margin-bottom: ivw(20)
+    .h5_footer_top_title_top
+        margin-bottom: ivw(20)
+.compony_modal_content
+    .compony_modal_name
+        font-size: ivw(29);
+        font-weight: bold;
+        color: #282E50;
+        line-height: ivw(37);
+        margin-top: ivw(40)
+        margin-bottom: ivw(20)
+    .compony_modal_desc
+        font-size: ivw(26)
+        font-weight: 400;
+        color: #667892;
+        line-height: ivw(48)
+    .h5_home_partner_1 
+        width: ivw(288)
+        height ivw(63)
+    .h5_home_partner_2
+        width: ivw(107)
+        height ivw(131)
+.service_modal_content
+    .compony_modal_name
+        font-size: ivw(29);
+        font-weight: bold;
+        color: #282E50;
+        line-height: ivw(37);
+        margin-top: ivw(40)
+        margin-bottom: ivw(20)
+    .compony_modal_desc
+        font-size: ivw(26)
+        font-weight: 400;
+        color: #667892;
+        line-height: ivw(48)
+    img 
+        width: ivw(60)
+        height ivw(60)
+        margin-right: ivw(20)
+.copyright_modal_content
+    .compony_modal_name
+        font-size: ivw(29);
+        font-weight: bold;
+        color: #282E50;
+        line-height: ivw(37);
+        margin-top: ivw(40)
+        margin-bottom: ivw(20)
+    .compony_modal_desc
+        font-size: ivw(26)
+        font-weight: 400;
+        color: #667892;
+        line-height: ivw(48)
+    .compony_modal_adress_title
+        margin-top: ivw(20)
+    .compony_modal_adress_copy
+        width: ivw(27)
+        height ivw(27)
+        margin-left: ivw(10)
+        margin-bottom: ivw(5)
+    img 
+        width: ivw(73)
+        height ivw(75)
+    .compony_modal_adress
+        font-size: ivw(26)
+        font-weight: 400;
+        color: #0666CE;
+        line-height: ivw(48)

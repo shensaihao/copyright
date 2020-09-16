@@ -65,4 +65,13 @@ export default {
      */
     postOriginalTraditionalInfo: (data) => get(`/v1/authTraditional/findById`, data),
 
+    /**
+     * 详情
+     */
+    getDetailInfo: (data) => get(`/v1/copyrightVerify/findById`, data),
+
+    /**
+     * 查询所有公开作品
+     */
+    getAllByCondition: (data) => get(`/v1/copyrightVerify/getByCondition`, data),
 }

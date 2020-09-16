@@ -4,15 +4,17 @@ import './index.css';
 import App from './App';
 import { Provider } from 'react-redux';
 import store from './store/reducer';
+import 'core-js/es'  
+import 'react-app-polyfill/ie9'  
+import 'react-app-polyfill/stable'
+
 
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <React.StrictMode>
     <Provider store={store}>
       <App />
-    </Provider>
-  </React.StrictMode>,
+    </Provider>,
   document.getElementById('root')
 );
 

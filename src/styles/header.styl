@@ -1,0 +1,165 @@
+.h5_header
+    width: 100%
+    height ivw(88)
+    background: #FFFFFF;
+    padding: ivw(22) ivw(35)
+    z-index: 10003
+    .h5_header_title
+        font-size: ivw(34)
+        font-weight: 400;
+        color: #000000;
+        line-height: ivw(48)
+    .h5_header_icon
+        width: ivw(44)
+        height ivw(44)
+    .h5_header_icon_back
+        margin-left: ivw(30)
+.header-drawer-top
+    width 100%
+    height 100vh
+    position absolute
+    overflow auto
+    -webkit-overflow-scrolling touch
+    z-index 1000
+    pointer-events none
+    &.am-drawer-open 
+        pointer-events auto
+    .am-drawer-sidebar
+        position absolute
+        top:  0
+        z-index 1002
+        width 100%
+        transform translateY(-100%)
+        transition all 0.5s ease
+        overflow auto
+        -webkit-overflow-scrolling touch
+        background: #ffffff
+        box-shadow 1px 1px 2px rgba(0,0,0,.15)
+.header-drawer-top.am-drawer-open
+    .am-drawer-overlay
+        z-index 1001
+        position absolute
+        top 0
+        bottom 0
+        left 0 
+        right 0
+        opacity 0.3
+        background-color rgba(0,0,0,.3)
+.h5_home_header_top
+    padding: 0 ivw(35)
+.h5_home_header_search_input
+    width: ivw(670)
+    height ivw(58)
+    background: #EDF4FC;
+    border-radius: ivw(29)
+    margin-top: ivw(20)
+    img 
+        width: ivw(30)
+        height ivw(34)
+        margin-left: ivw(22)
+    .home_search_input
+        border: none 
+        outline: none
+        background: #EDF4FC;
+.h5_home_header_item
+    height ivw(98)
+    line-height: ivw(98)
+    .h5_home_header_item_img
+        width: ivw(32)
+        height ivw(32)
+        margin-right: ivw(20)
+.h5_home_header_btn
+    width: 100%
+    height ivw(72)
+    background: #FFFFFF;
+    border: ivw(1) solid #DD2815;
+    opacity: 0.8;
+    border-radius: ivw(10)
+    font-size: ivw(32)
+    font-weight: 400;
+    color: #DE2816;
+    line-height: ivw(36)
+    margin-bottom: ivw(40)
+
+.header-drawer-right
+    width 100%
+    position absolute
+    overflow hidden
+    -webkit-overflow-scrolling touch
+    z-index 1000
+    pointer-events none
+    &.am-drawer-open 
+        pointer-events auto
+    .am-drawer-sidebar
+        position absolute
+        top ivw(88)
+        bottom 0
+        right 0
+        z-index 1002
+        width ivw(500)
+        height 100vh
+        background: #ffffff
+        transform translateX(100%)
+        background color-primary-bg
+        transition all 0.5s ease
+        overflow auto
+        -webkit-overflow-scrolling touch
+        box-shadow 1px 1px 2px rgba(0,0,0,.15)
+    .am-drawer-overlay
+        z-index 1001
+        position absolute
+        top 0
+        bottom 0
+        left 0 
+        right 0
+        opacity 0
+        background-color rgba(0, 0, 0, 0.4)
+.h5_user_phone
+    font-size: ivw(26);
+    font-weight: 400;
+    color: #667892;
+    margin-top: ivw(20)
+.h5_user_phone_number
+    font-size: ivw(34);
+    font-weight: bold;
+    color: #282E50;
+    margin-top: ivw(20)
+.h5_user_phone_button
+    width: ivw(690);
+    height: ivw(72);
+    background: #0666CE;
+    border-radius: ivw(10);
+    font-size: ivw(30);
+    font-weight: 400;
+    color: #FFFFFF;
+    margin-top: ivw(70)
+.h5_user_phone_box
+    padding: ivw(98) ivw(35) ivw(10) ivw(35)
+.h5_home_header_filter
+    height ivw(84)
+    line-height: ivw(84)
+    padding-left: ivw(40)
+.h5_home_header_line
+    width: ivw(500);
+    height: ivw(1);
+    background: #DFE3EB;
+.h5_filter_button
+    display: flex !important
+    flex-direction: column
+    justify-content: center
+    padding-left: ivw(40) !important
+    .ant-radio-button-wrapper
+        margin: ivw(20) 0
+        display: flex
+        justify-content: center
+        align-items: center
+.h5_home_header_title
+    padding-left: ivw(40)
+    font-size: ivw(28);
+    font-weight: 400;
+    color: #282E50;
+    line-height: ivw(48);
+    margin: ivw(30) 0
+.position-fixed
+    position: fixed
+    top: 0

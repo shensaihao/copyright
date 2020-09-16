@@ -59,6 +59,133 @@
     width: 100px;
     height: 87px;
     background: #C8DDFD;
+.loader {
+  width: 100px;
+  height: 100px;
+  svg {
+    width: 90%;
+    fill: none;
+    border-radius: 50%
+  }
+}
+
+
+.load {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 570;
+  stroke-width: 20px;
+  &.one {
+    stroke: #C8DDFD;
+    animation: load 1.5s infinite;
+  }
+  &.two {
+    stroke: #C8DDFD;
+    animation: load 1.5s infinite;
+    animation-delay: 0.1s;
+  }
+  &.three {
+    stroke: #C8DDFD;
+    animation: load 1.5s infinite;
+    animation-delay: 0.2s;
+  }
+}
+
+.point {
+  animation: bounce 1s infinite ease-in-out;
+  &.one {
+    fill: #C8DDFD;
+    animation-delay: 0s;
+  }
+  &.two {
+    fill: #C8DDFD;
+    animation-delay: 0.1s;
+  }
+  &.three {
+    fill: #C8DDFD;
+    animation-delay: 0.2s;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+@keyframes load {
+  0% {
+    stroke-dashoffset: 570;
+  }
+  50% {
+    stroke-dashoffset: 530;
+  }
+  100% {
+    stroke-dashoffset: 570;
+    transform: rotate(360deg);
+  }
+}
+
+.step_five
+  width: 100px
+  height 100px
+  svg 
+    border-radius: 50% !important
+  .load 
+      transform-origin: 50% 50%;
+      stroke-dasharray: 570;
+      stroke-width: 20px;
+      &.one 
+        stroke: #C8DDFD;
+        animation: load 1.5s;
+      
+      &.two
+        stroke: #C8DDFD;
+        animation: load 1.5s;
+        animation-delay: 0.1s;
+  
+      &.three
+        stroke: #C8DDFD;
+        animation: load 1.5s;
+        animation-delay: 0.2s;
+
+    .tick 
+        stroke-dasharray: 350;
+        stroke-dashoffset: 350;
+        animation: tick 0.8s 0.95s ease-in-out forwards;
+
+@keyframes circle {
+    from {
+        stroke-dashoffset: 1194;
+    }
+
+    to {
+        stroke-dashoffset: 2388;
+    }
+}
+
+@keyframes tick {
+    from {
+        stroke-dashoffset: 350;
+    }
+
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes title {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
 .step_four_box
     width: 700px;
     background: #F8FBFF;
@@ -137,7 +264,7 @@
     font-weight: bold;
     color:#0054D2;
 .home_wraper
-    padding: 54px 120px 40px 120px
+    padding: 20px 120px 40px 120px
 .home_box
     background: #FFFFFF;
     box-shadow: 0px 10px 16px 2px rgba(203, 212, 221, 0.16);

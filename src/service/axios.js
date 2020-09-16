@@ -48,6 +48,19 @@ export const get = (url, params, data) => new Promise((resolve, reject) => {
             .then(res => handleResposne(res, resolve, reject))
             .catch(err => handleError(err, reject));
     }
+    else {
+        axios(url, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Accept-Language': 'zh-CN',
+            },
+        })
+            .then(response => response.data)
+            .then(res => handleResposne(res, resolve, reject))
+            .catch(err => handleError(err, reject));
+    }
     
 })
 

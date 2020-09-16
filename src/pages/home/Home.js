@@ -39,7 +39,7 @@ export default () => {
     }
 
     useEffect(() => {
-        if (recive.type==="trademark") {
+        if (recive.type==="BRAND_TYPE") {
             originalBrandCreate(recive).then((res) => {
                 if (res.data) {
                     setStepOne(res.data)
@@ -50,10 +50,12 @@ export default () => {
                 if (res.responseCode==='_501') {
                     message.warning('登录已过期')
                     history.push('/login')
+                } else {
+                    message.warning(res.errorMsg)
                 }
             })
         }
-        if (recive.type==='copyright') {
+        if (recive.type==='COPYRIGHT_TYPE') {
             originalCopyrightCreate(recive).then((res) => {
                 if (res.data) {
                     setStepOne(res.data)
@@ -64,10 +66,12 @@ export default () => {
                 if (res.responseCode==='_501') {
                     message.warning('登录已过期')
                     history.push('/login')
+                } else {
+                    message.warning(res.errorMsg)
                 }
             })
         }
-        if(recive.type==='tradition') {
+        if(recive.type==='TRADITION_TYPE') {
             console.log(recive)
             originalTraditionalCreate(recive).then((res) => {
                 if (res.data) {
@@ -79,10 +83,12 @@ export default () => {
                 if (res.responseCode==='_501') {
                     message.warning('登录已过期')
                     history.push('/login')
+                } else {
+                    message.warning(res.errorMsg)
                 }
             })
         }
-        if (recive.type==='origin') {
+        if (recive.type==='SOURCE_TYPE') {
             originalSourceAreaCreate(recive).then((res) => {
                 if (res.data) {
                     setStepOne(res.data)
@@ -93,10 +99,12 @@ export default () => {
                 if (res.responseCode==='_501') {
                     message.warning('登录已过期')
                     history.push('/login')
+                } else {
+                    message.warning(res.errorMsg)
                 }
             })
         }
-        if (recive.type==='technology') {
+        if (recive.type==='TECH_TYPE') {
             originalTechCreate(recive).then((res) => {
                 if (res.data) {
                     setStepOne(res.data)
@@ -107,6 +115,8 @@ export default () => {
                 if (res.responseCode==='_501') {
                     message.warning('登录已过期')
                     history.push('/login')
+                } else {
+                    message.warning(res.errorMsg)
                 }
             })
         }
@@ -157,6 +167,12 @@ export default () => {
     }, [status])
 
     return (
+        <>
+        <div className="humberger_box flex-start">
+            <div className="humberger_box_name curser-pointer" onClick={() => history.push('/home')}>首页</div>
+            <div className="humberger_box_line"> / </div>
+            <div className="humberger_box_active curser-pointer">作品认证</div>
+        </div>
         <div className="home_wraper">
             <div className="home-wrapper home_box pt-60">
                 <div className="flex-center mb-50">
@@ -215,5 +231,6 @@ export default () => {
                 }
             </div>
         </div>
+        </>
     )
 }

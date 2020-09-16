@@ -12,6 +12,11 @@ export default {
     postIdentificationCreate: (data) => post(`/v1/identification/create`, data),
 
     /**
+     * 查询实名认证信息
+     */
+    getIdentificationInfo: () => get(`/v1/identification/findByUser`),
+
+    /**
      * 上传文件
      * 
      */

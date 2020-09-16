@@ -8,8 +8,7 @@ export default function StepFour(props) {
 
     useEffect(() => {
         if(props.worksInfo) {
-            console.log(props.worksInfo)
-            copyrightVerifyInfo({'relevanceId': props.worksInfo.id}).then((res) => {
+            copyrightVerifyInfo({'relevanceId': props.worksInfo.id, copyrightRegister: props.worksInfo.copyrightRegister}).then((res) => {
                 setDetail(res.data)
             })
         }
@@ -32,7 +31,25 @@ export default function StepFour(props) {
     return (
         <div className="flex-column-center-center">
             <div className="flex-column-center-center mb-20">
-                <div className="step-four-top-box"></div>
+                <div class="loader">
+                    <svg viewBox="0 0 120 120" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="load one" cx="60" cy="60" r="60" />
+                        <circle class="load two" cx="60" cy="60" r="60" />
+                        <circle class="load three" cx="60" cy="60" r="60" />
+                        <g>
+                        <circle class="point one" cx="40" cy="70" r="5" />
+                        <circle class="point two" cx="60" cy="70" r="5" />
+                        <circle class="point three" cx="80" cy="70" r="5" />
+                        </g>
+                    </svg>
+                </div>
+                {/* <div className="step-four-top-box loader-wrapper">
+                    <div class="loader">
+                        <div class="ball"></div>
+                        <div class="ball"></div>
+                        <div class="ball"></div>
+                    </div>
+                </div> */}
                 <div className="color-lable ft-size-24 font-weight">
                     信息发送上链中
                 </div>

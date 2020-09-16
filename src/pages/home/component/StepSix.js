@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {Modal} from 'antd'
 import { originalService, useLoading } from 'src/service'
+import dayjs from 'dayjs'
 
 export default function StepSix(props) {
 
@@ -11,7 +12,7 @@ export default function StepSix(props) {
     useEffect(() => {
         if(props.worksInfo) {
             console.log(props.worksInfo)
-            copyrightVerifyInfo({'relevanceId': props.worksInfo.id}).then((res) => {
+            copyrightVerifyInfo({'relevanceId': props.worksInfo.id, copyrightRegister: props.worksInfo.copyrightRegister}).then((res) => {
                 setDetail(res.data)
             })
         }
@@ -42,7 +43,7 @@ export default function StepSix(props) {
                 <div>认证成功</div>
             </div>
             <div className="flex-column-center-center mb-25">
-                <img src={require('src/images/step_six_emplete.png')} alt=""/>
+                <img src={detail.registerCertificate} alt=""/>
                 <div className="ft-size-18 color-main">认证证书</div>
             </div>
             <div className="flex-column-center-center step_six_box">
@@ -90,7 +91,7 @@ export default function StepSix(props) {
                     <div className="step-four-label mr-30">登记号</div>
                     <div>
                         {
-                            detail&&detail.authorName
+                            detail&&detail.registerNumber
                         }
                     </div>
                 </div>
@@ -122,7 +123,7 @@ export default function StepSix(props) {
                     <div className="step-four-label mr-30">登记日期</div>
                     <div>
                         {
-                            detail&&detail.登记日期
+                            detail&&dayjs(detail.createDate).format('YYYY-MM-DD')
                         }
                     </div>
                 </div>

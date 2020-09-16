@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react'
 import cs from 'classnames'
 import { useLoading, mineService } from 'src/service';
+import { message } from 'antd';
 
-const _images = {
-}
 const Input = (props) => {
 
     const inputRef = useRef()
@@ -11,6 +10,7 @@ const Input = (props) => {
     const [focus, setFocus] = useState(false)
     const [timer, setTimer] = useState(null)
     const [count, setCount] = useState(60)
+    const [error, setError] = useState(false)
     const [timer1, setTimer1] = useState(null)
     const [loading, getAuthMessageSmsCaptcha] = useLoading(mineService.getAuthMessageSmsCaptcha)
     const [loading1, getPhoneNumberUsed] = useLoading(mineService.getPhoneNumberUsed)
@@ -42,34 +42,58 @@ const Input = (props) => {
     }
 
     const getCheckCode = () => {
-        const q = {telephone: props.telephone}
-        getAuthMessageSmsCaptcha(q)
+        if (props.isRegister) {
+            const q = {telephone: props.telephone, smsCodeType: 'REGISTER'}
+            getAuthMessageSmsCaptcha(q)
             .then(() => {
                 startCount(60)
             })
             .catch(err => {
-                console.log(err)
+                message.warning(err.errorMsg)
             })
+        } else {
+            const q = {telephone: props.telephone, smsCodeType: 'CHANGE_TELEPHONE'}
+            getAuthMessageSmsCaptcha(q)
+            .then(() => {
+                startCount(60)
+            })
+            .catch(err => {
+                message.warning(err.errorMsg)
+            })
+        }
     }
 
     const getCheckPhone = () => {
-        if (!props.telephone) return
-        const q = {telephone: props.telephone}
-        getPhoneNumberUsed(q).then((res) => {
-            if(!res.data) {
+        if (!props.telephone) return message.warning('请输入手机号')
+        else if (!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(props.telephone))) return message.warning('手机号格式错误，请检查')
+        else {
+            const q = {telephone: props.telephone}
+            getPhoneNumberUsed(q).then(() => {
                 getCheckCode()
-            } else {
-                console.log('zhuce')
-            }
-        }).catch((err) => {
-            // console.log(err)
-        })
-        
+            }).catch((err) => {
+                if (props.isRegister) {
+                    message.warning(err.errorMsg)
+                } else {
+                    message.warning('该手机号已被注册，请填写未注册的手机号')
+                }
+            })
+        }
     }
 
     const onFocus = () => { setFocus(true) }
 
-    const onBlur = () => { setFocus(false) }
+    const onBlur = () => {
+        if (props.icon==='passwordconfirm') {
+            if (props.value!==props.password) {
+                setError(true)
+            }
+        }
+        if (props.icon==='phone') {
+            if (!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(props.value))){
+                setError(true)
+            }
+        }
+     }
 
     const canGet = (
         <div className="input-after-code" onClick={getCheckPhone}>
@@ -121,20 +145,15 @@ const Input = (props) => {
                         {props.addonafter && <After />}
                     </div>
                 </div>
+                {
+                    error&&
+                    <div className="input-error flex-end pt-15">
+                        {
+                            props.errorMsg
+                        }
+                    </div>
+                }
             </div>
-            {
-                props.type==='password'&&
-                <div className="flex-start mt-8">
-                    <img src={require('src/images/register_number.png')} alt=""/>
-                    <div className="ml-8 mr-30">数字</div>
-                    <img src={require('src/images/register_info.png')} alt=""/>
-                    <div className="ml-8 mr-30">大写字母</div>
-                    <img src={require('src/images/register_info.png')} alt=""/>
-                    <div className="ml-8 mr-30">小写字母</div>
-                    <img src={require('src/images/register_info.png')} alt=""/>
-                    <div className="ml-8 mr-30">6-30位</div>
-                </div>
-            }
         </div>
     )
 }

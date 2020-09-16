@@ -31,6 +31,8 @@ export default function Certification() {
             if (res.responseCode==='_501') {
                 message.warning('登录已过期')
                 history.push('/login')
+            } else {
+                message.warning(res.errorMsg)
             }
         })
     }, [cpyrightVerifyByCondition, history, type])
@@ -93,6 +95,8 @@ export default function Certification() {
             if (res.responseCode==='_501') {
                 message.warning('登录已过期')
                 history.push('/login')
+            } else {
+                message.warning(res.errorMsg)
             }
         })
       }, [copyright, cpyrightVerifyByCondition, history, type])
@@ -106,6 +110,8 @@ export default function Certification() {
             if (res.responseCode==='_501') {
                 message.warning('登录已过期')
                 history.push('/login')
+            } else {
+                message.warning(res.errorMsg)
             }
         })
       }
